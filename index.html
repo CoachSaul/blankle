@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BL_NKLE — Daily German Puzzle</title>
+  <script>(function(){if(localStorage.getItem('blankle_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}());</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #2eb4fb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .landing {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* ── Brand ─────────────────────────────── */
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 4px;
+    }
+
+    .logo-box {
+      width: 64px;
+      height: 64px;
+      border: 2px solid #000;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 34px;
+      font-weight: bold;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 72px;
+      font-weight: bold;
+      color: #000;
+      letter-spacing: 6px;
+      line-height: 1;
+    }
+    @media (max-width: 479px) {
+      .brand-name { font-size: 36px; letter-spacing: 3px; }
+      .tagline { font-size: 13px; padding: 0 16px; }
+    }
+
+    .tagline {
+      font-size: 18px;
+      color: #000;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-top: -4px;
+    }
+
+    /* ── Segmented control ─────────────────── */
+    .seg-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .seg-outer {
+      width: 100%;
+      border: 2px solid #000;
+      border-radius: 13px;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .seg {
+      display: flex;
+      width: 100%;
+      border-radius: 9px;
+      overflow: hidden;
+    }
+
+    .seg-btn {
+      flex: 1;
+      padding: 10px 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.45);
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.14s, color 0.14s;
+      white-space: nowrap;
+      -webkit-appearance: none;
+    }
+    .seg-btn.done::after { content: none; }
+
+    .seg-btn.active {
+      background: #fff;
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    .level-desc {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.55);
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      min-height: 18px;
+    }
+
+    /* ── Play button ───────────────────────── */
+    .play-btn {
+      width: 160px;
+      padding: 15px 0;
+      background: #000;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s;
+      letter-spacing: 0.3px;
+      margin-top: 6px;
+      -webkit-appearance: none;
+    }
+
+    .play-btn:hover  { background: #222; }
+    .play-btn:active { transform: scale(0.96); }
+
+    .archive-btn {
+      width: 160px;
+      padding: 15px 0;
+      background: transparent;
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      border: 1.5px solid #000;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s;
+      letter-spacing: 0.3px;
+      text-decoration: none;
+      display: grid;
+      place-items: center;
+      -webkit-appearance: none;
+    }
+
+    .archive-btn:hover   { background: rgba(0,0,0,0.06); }
+    .archive-btn:active  { transform: scale(0.96); }
+    .archive-btn:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+    .no-puzzles-msg {
+      font-size: 13px;
+      color: rgba(0,0,0,0.45);
+      text-align: center;
+      margin-top: -6px;
+    }
+    [data-theme="dark"] .no-puzzles-msg { color: rgba(255,255,255,0.35); }
+
+    /* ── Footer ────────────────────────────── */
+    .landing-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #000;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    #footer-date {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+    }
+    #footer-date .footer-puzzle-no {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.4;
+    }
+
+    /* ── Settings icon ─────────────────────────────────── */
+    .settings-icon-btn {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 0;
+      transition: background 0.14s;
+      z-index: 10;
+      -webkit-appearance: none;
+    }
+    .settings-icon-btn:hover { background: rgba(0,0,0,0.08); }
+    #submit-btn  { right: 108px; }
+    #help-btn    { right: 62px; }
+    .modal-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #6b6b6b;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── Modal ─────────────────────────────────────────── */
+    [hidden] { display: none !important; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-panel {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 28px 32px;
+      max-width: 380px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .modal-close {
+      align-self: flex-end;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1a1a;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+    }
+    .modal-close:hover { color: #666; }
+    .modal-close-x { font-size: 2.5em; font-weight: 300; line-height: 1; }
+    .modal-logo-box {
+      width: 44px;
+      height: 44px;
+      border: 2px solid #000;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+    }
+    .settings-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      text-align: center;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 2px 0;
+    }
+    .settings-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+    .toggle-btn {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      background: #e2e2df;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      -webkit-appearance: none;
+    }
+    .toggle-btn[aria-checked="true"] { background: #2eb4fb; }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      display: block;
+      pointer-events: none;
+    }
+    .toggle-btn[aria-checked="true"] .toggle-knob { transform: translateX(18px); }
+
+    /* ── Dark mode ─────────────────────────────────────── */
+    [data-theme="dark"] body           { background: #1c1c1e; }
+    [data-theme="dark"] .brand-name,
+    [data-theme="dark"] .tagline       { color: #f0f0ed; }
+    [data-theme="dark"] .logo-box      { color: #f0f0ed; border-color: #f0f0ed; }
+    [data-theme="dark"] .seg-outer     { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+    [data-theme="dark"] .seg-btn       { color: rgba(255,255,255,0.4); }
+    [data-theme="dark"] .seg-btn.active { background: #2eb4fb; color: #000; }
+    [data-theme="dark"] .level-desc    { color: rgba(255,255,255,0.4); }
+    [data-theme="dark"] .play-btn      { background: #fff; color: #000; }
+    [data-theme="dark"] .play-btn:hover { background: #e0e0e0; }
+    [data-theme="dark"] .archive-btn   { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); }
+    [data-theme="dark"] .archive-btn:hover { background: rgba(255,255,255,0.08); }
+    [data-theme="dark"] .landing-footer { color: rgba(255,255,255,0.7); }
+    [data-theme="dark"] .settings-icon-btn { color: #fff; }
+    [data-theme="dark"] .settings-icon-btn:hover { background: rgba(255,255,255,0.1); }
+    [data-theme="dark"] .modal-panel   { background: #2c2c2e; }
+    [data-theme="dark"] .modal-close,
+    [data-theme="dark"] .settings-title,
+    [data-theme="dark"] .modal-logo-box { color: #f0f0ed; }
+    [data-theme="dark"] .modal-close:hover { color: #8e8e93; }
+    [data-theme="dark"] .modal-logo-box { border-color: #f0f0ed; }
+    [data-theme="dark"] .settings-label { color: #f0f0ed; }
+    [data-theme="dark"] .toggle-btn    { background: #3a3a3c; }
+    [data-theme="dark"] #coming-soon-modal p:last-child { color: #8e8e93; }
+    [data-theme="dark"] .modal-body { color: #8e8e93; }
+  </style>
+</head>
+<body>
+
+  <button class="settings-icon-btn" id="help-btn" aria-label="How to play">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+      <circle cx="12" cy="17" r=".5" fill="currentColor" stroke="none"/>
+    </svg>
+  </button>
+
+  <button class="settings-icon-btn" id="submit-btn" aria-label="Submit a story idea">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="22" y1="2" x2="11" y2="13"/>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+    </svg>
+  </button>
+
+  <button class="settings-icon-btn" id="settings-btn" aria-label="Settings">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+
+  <div id="help-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="help-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">How to play</p>
+      <p class="modal-body">BL_NKLE is a daily German fill-in-the-blank puzzle. Each day four new puzzles are published, one for each level.</p>
+      <p class="modal-body">Our levels roughly align with the Common European Framework of Reference (CEFR):</p>
+      <ul class="modal-body" style="text-align:left;padding-left:1.2em;line-height:1.8;">
+        <li><strong>Beginner (A1):</strong> simple present tense, everyday vocabulary</li>
+        <li><strong>Easy (A2):</strong> past tense and connectors, familiar situations</li>
+        <li><strong>Medium (B1):</strong> mixed tenses, subordinate clauses, varied vocabulary</li>
+        <li><strong>Hard (B2):</strong> complex grammar, abstract topics, rich vocabulary</li>
+      </ul>
+      <p class="modal-body">Fill in the gaps using the word bank below the story.</p>
+      <p class="modal-body">Check out new puzzles daily to keep your streak alive. Share your score with friends and try to get that perfect BL_NKLE.</p>
+    </div>
+  </div>
+
+  <div id="submit-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="submit-modal-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">Submit an idea</p>
+      <p class="modal-body">Want your story featured or have a great idea for a BL_NKLE? Submissions coming soon!</p>
+    </div>
+  </div>
+
+  <div id="coming-soon-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="coming-soon-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">Expert · C1/2</p>
+      <p style="font-family:'DM Sans',sans-serif;font-size:15px;color:#6b6b6b;text-align:center;line-height:1.5;">This level is coming soon.<br>Check back for updates!</p>
+    </div>
+  </div>
+
+  <div id="completed-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="completed-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">All done!</p>
+      <p style="font-family:'DM Sans',sans-serif;font-size:15px;color:#6b6b6b;text-align:center;line-height:1.5;">You've completed all available puzzles for this level. Check back soon for more!</p>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="settings-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">Settings</p>
+      <div class="settings-row">
+        <span class="settings-label">Dark mode</span>
+        <button class="toggle-btn" id="dark-mode-toggle" role="switch" aria-checked="false">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="landing">
+
+    <div class="brand">
+      <div class="logo-box">b</div>
+      <span class="brand-name">BL_NKLE</span>
+    </div>
+
+    <p class="tagline">The daily German fill-in-the-blank puzzle</p>
+
+    <div class="seg-wrap">
+      <div class="seg-outer">
+        <div class="seg" role="group" aria-label="Difficulty">
+          <button class="seg-btn active" data-level="A1" data-desc="Beginner · A1">Beginner</button>
+          <button class="seg-btn" data-level="A2" data-desc="Elementary · A2">Easy</button>
+          <button class="seg-btn" data-level="B1" data-desc="Intermediate · B1">Medium</button>
+          <button class="seg-btn" data-level="B2" data-desc="Upper Intermediate · B2">Hard</button>
+          <button class="seg-btn" data-level="C1" data-desc="Coming soon">Expert</button>
+        </div>
+      </div>
+      <p class="level-desc" id="level-desc">Beginner · A1</p>
+    </div>
+
+    <button class="play-btn" id="play-btn">Play</button>
+    <a class="archive-btn" href="archive.html">Archive</a>
+    <button class="archive-btn" id="random-btn">Random</button>
+    <p class="no-puzzles-msg" id="no-puzzles-msg" hidden>No puzzles available yet for this level.</p>
+
+    <div class="landing-footer">
+      <span id="footer-date"></span>
+    </div>
+
+  </div>
+
+  <script>
+    // Level selector
+    const buttons  = document.querySelectorAll('.seg-btn');
+    const descEl   = document.getElementById('level-desc');
+    const playBtn  = document.getElementById('play-btn');
+    let selectedLevel = 'A1';
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.level === 'C1') {
+          document.getElementById('coming-soon-modal').hidden = false;
+          document.body.style.overflow = 'hidden';
+          return;
+        }
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedLevel = btn.dataset.level;
+        descEl.textContent = btn.dataset.desc;
+        document.getElementById('no-puzzles-msg').hidden = true;
+      });
+    });
+    playBtn.addEventListener('click', () => {
+      window.location.href = 'puzzle.html?level=' + selectedLevel;
+    });
+
+    // Random puzzle
+    const SUPABASE_URL = 'https://mjrllbftoruhvwzedkym.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_e0QYsjxJv0MmgmdWI-tFNw_kxh6mPID';
+    document.getElementById('random-btn').addEventListener('click', async function () {
+      const btn = this;
+      const msg = document.getElementById('no-puzzles-msg');
+      msg.hidden = true;
+      btn.textContent = '…';
+      btn.disabled = true;
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        const url = SUPABASE_URL + '/rest/v1/puzzles?select=date&level=eq.' + selectedLevel + '&date=neq.' + today;
+        const res = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Accept': 'application/json'
+          }
+        });
+        const puzzles = await res.json();
+        const unplayed = puzzles.filter(function (p) {
+          return localStorage.getItem('luckentext_' + p.date + '_' + selectedLevel) === null;
+        });
+        if (!unplayed.length) {
+          if (puzzles.length) {
+            document.getElementById('completed-modal').hidden = false;
+            document.body.style.overflow = 'hidden';
+          } else {
+            msg.textContent = 'No puzzles available yet for this level.';
+            msg.hidden = false;
+          }
+          btn.textContent = 'Random';
+          btn.disabled = false;
+          return;
+        }
+        const pick = unplayed[Math.floor(Math.random() * unplayed.length)];
+        window.location.href = 'puzzle.html?date=' + pick.date + '&level=' + selectedLevel;
+      } catch (err) {
+        btn.textContent = 'Random';
+        btn.disabled = false;
+      }
+    });
+
+    // Mark completed levels
+    (function () {
+      var today = new Date().toISOString().slice(0, 10);
+      document.querySelectorAll('.seg-btn[data-level]').forEach(function (btn) {
+        if (localStorage.getItem('luckentext_' + today + '_' + btn.dataset.level) !== null) {
+          btn.classList.add('done');
+        }
+      });
+    }());
+
+    // Date + puzzle number
+    const d = new Date();
+    const dateEl = document.getElementById('footer-date');
+    var dateLine = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    var launchDate = new Date('2026-05-20T00:00:00Z');
+    var utcToday = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    var puzzleNo = Math.floor((utcToday - launchDate.getTime()) / 86400000) + 1;
+    dateEl.innerHTML = dateLine + '<span class="footer-puzzle-no">#' + puzzleNo + '</span>';
+
+    // Theme
+    var THEME_KEY = 'blankle_theme';
+    function isDark() { return localStorage.getItem(THEME_KEY) === 'dark'; }
+    function applyTheme(dark) {
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      var t = document.getElementById('dark-mode-toggle');
+      if (t) t.setAttribute('aria-checked', dark ? 'true' : 'false');
+    }
+    applyTheme(isDark());
+
+    // Help modal
+    document.getElementById('help-btn').addEventListener('click', function () {
+      document.getElementById('help-modal').hidden = false;
+      document.body.style.overflow = 'hidden';
+    });
+    document.getElementById('help-close').addEventListener('click', function () {
+      document.getElementById('help-modal').hidden = true;
+      document.body.style.overflow = '';
+    });
+    document.getElementById('help-modal').addEventListener('click', function (e) {
+      if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+    });
+
+    // Coming soon modal
+    document.getElementById('coming-soon-close').addEventListener('click', function () {
+      document.getElementById('coming-soon-modal').hidden = true;
+      document.body.style.overflow = '';
+    });
+    document.getElementById('coming-soon-modal').addEventListener('click', function (e) {
+      if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+    });
+
+    // Completed modal
+    document.getElementById('completed-close').addEventListener('click', function () {
+      document.getElementById('completed-modal').hidden = true;
+      document.body.style.overflow = '';
+    });
+    document.getElementById('completed-modal').addEventListener('click', function (e) {
+      if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+    });
+
+    // Submit modal
+    document.getElementById('submit-btn').addEventListener('click', function () {
+      document.getElementById('submit-modal').hidden = false;
+      document.body.style.overflow = 'hidden';
+    });
+    document.getElementById('submit-modal-close').addEventListener('click', function () {
+      document.getElementById('submit-modal').hidden = true;
+      document.body.style.overflow = '';
+    });
+    document.getElementById('submit-modal').addEventListener('click', function (e) {
+      if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+    });
+
+    // Settings modal
+    document.getElementById('settings-btn').addEventListener('click', function () {
+      document.getElementById('settings-modal').hidden = false;
+      document.body.style.overflow = 'hidden';
+    });
+    document.getElementById('settings-close').addEventListener('click', function () {
+      document.getElementById('settings-modal').hidden = true;
+      document.body.style.overflow = '';
+    });
+    document.getElementById('settings-modal').addEventListener('click', function (e) {
+      if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+    });
+    document.getElementById('dark-mode-toggle').addEventListener('click', function () {
+      var dark = !isDark();
+      localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+      applyTheme(dark);
+    });
+  </script>
+
+</body>
+</html>

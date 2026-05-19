@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BL_NKLE — Daily German Puzzle</title>
+  <script>(function(){if(localStorage.getItem('blankle_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}());</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Recolour all brand accents from red to blue, swap story font to Georgia */
+    :root {
+      --brand:        #2eb4fb;
+      --brand-dark:   #0d9fe8;
+      --brand-light:  rgba(46, 180, 251, 0.07);
+      --brand-mid:    rgba(46, 180, 251, 0.18);
+      --font-story:   'Lora', Georgia, serif;
+    }
+
+    /* Header */
+    .site-header {
+      padding: 84px 0 42px;
+      height: auto;
+    }
+    .header-inner {
+      height: auto;
+      align-items: baseline;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+    .header-brand {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 48px;
+      font-weight: bold;
+      color: #000;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    #header-date {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 27px;
+      font-weight: 300;
+      color: #555;
+      line-height: 1;
+    }
+
+    .puzzle-meta {
+      justify-content: flex-start;
+    }
+
+    .story-card {
+      max-width: 750px;
+    }
+
+    /* Left-align all content with fixed left margin */
+    .container {
+      margin: 0;
+      max-width: 100%;
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+
+    main.container {
+      max-width: 750px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    /* BL_NKLE: flush left on narrow screens (no gap beside container) */
+    .site-header .container {
+      padding-left: 0;
+    }
+
+    /* Gap exists but < 60px: align BL_NKLE with container left edge */
+    @media (min-width: 750px) and (max-width: 869px) {
+      .site-header .container {
+        padding-left: calc((100vw - 750px) / 2);
+      }
+    }
+
+    /* Gap >= 60px: BL_NKLE sits 60px to the left of the container */
+    @media (min-width: 870px) {
+      .site-header .container {
+        padding-left: calc((100vw - 750px) / 2 - 60px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      main.container {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .story-text {
+        font-size: 15px;
+        line-height: 2.2em;
+      }
+      .blank-input {
+        min-width: unset;
+        width: 80px !important;
+      }
+    }
+
+    @media (max-width: 479px) {
+      .site-header { padding: 20px 0 16px; }
+      .header-brand { font-size: 28px; }
+      #header-date { font-size: 16px; }
+      .header-inner { gap: 10px; margin-left: 16px; }
+      .icon-btn { width: 34px; height: 34px; }
+      .icon-btn svg { width: 24px; height: 24px; }
+    }
+
+    /* Extra line-height so focused blank highlight doesn't clip the line above */
+    .story-text {
+      line-height: 2.5em;
+    }
+
+    .blank-input {
+      height: 2em;
+      padding: 0;
+      line-height: 2em;
+      vertical-align: middle;
+    }
+
+    .full-story-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    #full-story-text {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    /* ── Icon bar ───────────────────────────────────────── */
+    .icon-bar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .icon-bar-inner {
+      padding: 4px 30px 4px 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 2px;
+    }
+    @media (min-width: 750px) and (max-width: 869px) {
+      .icon-bar-inner { padding-left: calc((100vw - 750px) / 2); }
+    }
+    @media (min-width: 870px) {
+      .icon-bar-inner { padding-left: calc((100vw - 750px) / 2 - 60px); }
+    }
+    #back-btn { margin-right: auto; }
+    @media (max-width: 479px) {
+      .icon-bar-inner { padding: 2px 16px; }
+      .level-badge  { order: 0; }
+      #puzzle-timer { order: 1; width: auto; margin-left: auto; }
+      .puzzle-title {
+        order: 2;
+        width: 100%;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+      .results-actions a.btn-share { display: none; }
+      .controls { justify-content: center; }
+      .results-actions { justify-content: center; gap: 8px; }
+      .share-toast { min-height: 0; }
+
+      .results-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; width: 100%; gap: 0; margin-bottom: 12px; }
+      .results-score { flex: 0 0 auto; }
+      #results-time { flex: 0 0 auto; }
+      #results-time:not([hidden]) { display: block; }
+      #results-time:not([hidden])::before { content: none; }
+      .results-label { width: 100%; margin-top: 4px; }
+    }
+
+    .icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #000;
+      border-radius: 50%;
+      padding: 0;
+      transition: background 0.14s;
+      -webkit-appearance: none;
+    }
+    .icon-btn:hover { background: rgba(0, 0, 0, 0.06); }
+
+    .htp-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      text-align: center;
+    }
+
+    .htp-steps {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 18px;
+      text-align: left;
+    }
+
+    .htp-steps li {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .htp-steps li strong {
+      font-weight: 600;
+    }
+
+    .htp-subbullets {
+      margin-top: 6px;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      list-style: disc;
+    }
+
+    .htp-divider {
+      width: 100%;
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    .htp-note {
+      width: 100%;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .puzzle-timer {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .results-score-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .results-time {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Results modal ──────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-panel {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 28px 32px;
+      max-width: 400px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .modal-close {
+      align-self: flex-end;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+    }
+    .modal-close:hover { color: var(--text-muted); }
+
+    .modal-close-x {
+      font-size: 2.5em;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .modal-logo-box {
+      width: 44px;
+      height: 44px;
+      border: 2px solid #000;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .modal-perf-msg {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .modal-stats {
+      display: flex;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .modal-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 6px;
+      border-right: 1px solid var(--border);
+      gap: 5px;
+    }
+    .modal-stat:last-child { border-right: none; }
+
+    .modal-stat-value {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .modal-stat-label {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .modal-puzzle-num {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .modal-score-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .modal-score-display {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+    }
+
+    .modal-score-number {
+      font-family: var(--font-story);
+      font-size: 60px;
+      font-weight: 600;
+      color: var(--brand);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .modal-score-denom {
+      font-family: var(--font-story);
+      font-size: 30px;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    .modal-score-time {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.3px;
+    }
+
+    .modal-score-msg {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .modal-share-btn {
+      width: 100%;
+      padding: 14px 0;
+      background: #000;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s;
+      letter-spacing: 0.3px;
+      -webkit-appearance: none;
+    }
+    .modal-share-btn:hover  { background: #222; }
+    .modal-share-btn:active { transform: scale(0.98); }
+
+    .modal-play-another-btn {
+      width: 100%;
+      padding: 14px 0;
+      background: transparent;
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      border: 1.5px solid #000;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s;
+      letter-spacing: 0.3px;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      -webkit-appearance: none;
+    }
+    .modal-play-another-btn:hover  { background: rgba(0,0,0,0.05); }
+    .modal-play-another-btn:active { transform: scale(0.98); }
+    [data-theme="dark"] .modal-play-another-btn { color: #f0f0ed; border-color: #f0f0ed; }
+    [data-theme="dark"] .modal-play-another-btn:hover { background: rgba(255,255,255,0.08); }
+
+    .modal-share-toast {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--correct);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      min-height: 0;
+      line-height: 0;
+    }
+    .modal-share-toast:not(:empty) { line-height: 1.4; }
+
+    /* ── Settings toggle ────────────────────────────────── */
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 2px 0;
+    }
+    .settings-label {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .toggle-btn {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      background: var(--border);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      -webkit-appearance: none;
+    }
+    .toggle-btn[aria-checked="true"] { background: var(--brand); }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      display: block;
+      pointer-events: none;
+    }
+    .toggle-btn[aria-checked="true"] .toggle-knob { transform: translateX(18px); }
+
+    /* ── Dark mode ──────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg:           #1c1c1e;
+      --card:         #2c2c2e;
+      --text:         #f0f0ed;
+      --text-muted:   #8e8e93;
+      --border:       #3a3a3c;
+      --brand-light:  rgba(46, 180, 251, 0.15);
+      --brand-mid:    rgba(46, 180, 251, 0.28);
+      --correct-bg:   rgba(39, 174, 96, 0.18);
+      --incorrect-bg: rgba(192, 57, 43, 0.18);
+      --shadow:       0 1px 3px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.4);
+      --shadow-lg:    0 4px 24px rgba(0,0,0,.5);
+    }
+    [data-theme="dark"] .header-brand   { color: var(--text); }
+    [data-theme="dark"] #header-date    { color: var(--text-muted); }
+    [data-theme="dark"] .icon-btn       { color: #fff; }
+    [data-theme="dark"] .btn-ghost      { color: #fff; border-color: #fff; }
+    [data-theme="dark"] .btn-ghost:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.7); }
+    [data-theme="dark"] .btn-share      { background: transparent; color: #fff; border: 1.5px solid #fff; }
+    [data-theme="dark"] .btn-share:hover { background: rgba(255,255,255,0.08); }
+    [data-theme="dark"] .modal-panel    { background: var(--card); }
+    [data-theme="dark"] .modal-perf-msg,
+    [data-theme="dark"] .htp-title      { color: var(--text); }
+    [data-theme="dark"] .modal-logo-box { border-color: var(--text); color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="header-brand">BL_NKLE</a>
+        <span id="header-date"></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="icon-bar">
+    <div class="icon-bar-inner">
+      <a class="icon-btn" id="back-btn" href="index.html" aria-label="Back to home">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+      </a>
+      <button class="icon-btn" id="help-btn" aria-label="Help">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <circle cx="12" cy="17" r=".5" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="settings-btn" aria-label="Settings">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <main class="container">
+
+
+<div id="puzzle-area">
+
+      <div id="loading-state" class="state-panel">
+        <div class="spinner"></div>
+        <p>Loading today's puzzle…</p>
+      </div>
+
+      <div id="error-state" class="state-panel" hidden>
+        <p style="max-width:300px;line-height:1.6;">Sorry, something went wrong. Today's puzzle isn't available right now. Please try again later or choose a different level.</p>
+      </div>
+
+      <div id="puzzle-content" hidden>
+
+        <div class="puzzle-meta">
+          <h1 class="puzzle-title" id="puzzle-title"></h1>
+          <span class="level-badge" id="puzzle-level-badge"></span>
+          <span id="puzzle-timer" class="puzzle-timer" hidden>00:00</span>
+        </div>
+
+        <div class="story-card">
+          <p class="story-text" id="story-text"></p>
+        </div>
+
+        <div class="word-bank-section">
+          <h2 class="section-label">Word Bank</h2>
+          <div class="word-bank" id="word-bank"></div>
+        </div>
+
+        <div class="controls" id="controls">
+          <button class="btn btn-primary" id="check-btn">Check answers</button>
+          <button class="btn btn-ghost" id="reset-btn">Reset</button>
+        </div>
+
+        <div class="results-panel" id="results-panel" hidden>
+          <div class="results-header">
+            <div class="results-score-row">
+              <div class="results-score">
+                <span class="score-number" id="score-number">0</span>
+                <span class="score-denom" id="score-denom">/10</span>
+              </div>
+              <span id="results-time" class="results-time" hidden></span>
+            </div>
+            <p class="results-label" id="results-label"></p>
+          </div>
+
+          <div class="score-breakdown" id="score-breakdown"></div>
+
+          <div class="results-actions">
+            <button class="btn btn-share" id="share-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16 6 12 2 8 6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Share result
+            </button>
+            <button class="btn btn-share" id="show-results-btn">Show results</button>
+            <a class="btn btn-share" href="index.html" style="text-decoration:none;">Play Another Difficulty</a>
+            <span class="share-toast" id="share-toast" role="status" aria-live="polite"></span>
+          </div>
+
+          <div class="full-story-section" id="full-story-section" hidden>
+            <h2 class="section-label">Full story</h2>
+            <p id="full-story-text"></p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Learn German one blank at a time. 4 new puzzles every day.</p>
+    </div>
+  </footer>
+
+  <script src="puzzles.js"></script>
+
+  <script>
+    (function () {
+      // Inject hidden level tabs so app.js can register click listeners and
+      // set currentLevel correctly (needed for localStorage keys and share text).
+      // app.js reads .level-tab elements at parse time, so this must run before app.js.
+      var wrap = document.createElement('div');
+      wrap.hidden = true;
+      wrap.setAttribute('aria-hidden', 'true');
+      ['A1','A2','B1','B2'].forEach(function (l, i) {
+        var btn = document.createElement('button');
+        btn.className = 'level-tab' + (i === 0 ? ' active' : '');
+        btn.setAttribute('data-level', l);
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        wrap.appendChild(btn);
+      });
+      document.body.appendChild(wrap);
+
+      // For levels other than A1, suppress the default A1 fetch so it never
+      // resolves — no race condition when the correct level tab is clicked below.
+      var params  = new URLSearchParams(location.search);
+      var lvl     = params.get('level');
+      var urlDate = params.get('date');
+      var today   = new Date().toISOString().slice(0, 10);
+
+      if (urlDate && urlDate !== today) {
+        var todayPfx   = 'luckentext_' + today + '_';
+        var archivePfx = 'luckentext_' + urlDate + '_';
+        var _get    = Storage.prototype.getItem;
+        var _set    = Storage.prototype.setItem;
+        var _remove = Storage.prototype.removeItem;
+        function rekey(k) {
+          return (typeof k === 'string' && k.indexOf(todayPfx) === 0)
+            ? archivePfx + k.slice(todayPfx.length)
+            : k;
+        }
+        Storage.prototype.getItem    = function (k) { return _get.call(this, rekey(k)); };
+        Storage.prototype.setItem    = function (k, v) { return _set.call(this, rekey(k), v); };
+        Storage.prototype.removeItem = function (k) { return _remove.call(this, rekey(k)); };
+      }
+
+      if (!urlDate && (!lvl || lvl === 'A1')) return;
+
+      var _orig = window.fetchPuzzle;
+      var used  = false;
+      window.fetchPuzzle = async function (date, level) {
+        var actualDate = urlDate || date;
+        if (!used) {
+          used = true;
+          if (level === 'A1' && lvl && lvl !== 'A1') {
+            return new Promise(function () {});
+          }
+        }
+        return _orig(actualDate, level);
+      };
+    }());
+  </script>
+
+  <script src="app.js"></script>
+
+  <!-- After app.js registers its DOMContentLoaded handler, register ours.
+       Handlers fire in registration order, so app.js's runs first (sets up
+       tab listeners, starts the shimmed A1 load), then we click the right tab. -->
+  <script>
+    // ── Archive detection ──────────────────────────────────────
+    var _urlDate = new URLSearchParams(location.search).get('date');
+    var _todayStr = new Date().toISOString().slice(0, 10);
+    var _isArchivePuzzle = !!(_urlDate && _urlDate !== _todayStr);
+
+    // ── Theme ──────────────────────────────────────────────────
+    var THEME_KEY = 'blankle_theme';
+    function isDark() { return localStorage.getItem(THEME_KEY) === 'dark'; }
+    function applyTheme(dark) {
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      var t = document.getElementById('dark-mode-toggle');
+      if (t) t.setAttribute('aria-checked', dark ? 'true' : 'false');
+    }
+
+    // ── Timer ──────────────────────────────────────────────────
+    var _timerInterval = null;
+    var _timerSeconds  = 0;
+    var _userChecked   = false;
+
+    function timerEl()      { return document.getElementById('puzzle-timer'); }
+    function resultsTimeEl(){ return document.getElementById('results-time'); }
+
+    function formatTime(s) {
+      var m = Math.floor(s / 60), r = s % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+    }
+
+    function startTimer() {
+      clearInterval(_timerInterval);
+      _timerSeconds = 0;
+      var el = timerEl();
+      if (el) { el.textContent = '00:00'; el.hidden = false; }
+      _timerInterval = setInterval(function () {
+        _timerSeconds++;
+        var el = timerEl();
+        if (el) el.textContent = formatTime(_timerSeconds);
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(_timerInterval);
+      _timerInterval = null;
+      return formatTime(_timerSeconds);
+    }
+
+    // ── Stats ──────────────────────────────────────────────────
+    var STATS_KEY = 'blankle_stats';
+
+    function loadStats() {
+      try {
+        var raw = localStorage.getItem(STATS_KEY);
+        return raw ? JSON.parse(raw) : { completed: 0, perfect: 0, streak: 0, maxStreak: 0, lastStreakDate: null };
+      } catch (e) { return { completed: 0, perfect: 0, streak: 0, maxStreak: 0, lastStreakDate: null }; }
+    }
+
+    function saveStats(s) {
+      try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch (e) {}
+    }
+
+    function updateStats(score, maxScore) {
+      var today = new Date().toISOString().slice(0, 10);
+      var s = loadStats();
+      s.completed++;
+      if (score === maxScore) s.perfect++;
+      if (s.lastStreakDate !== today) {
+        var yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        s.streak = (s.lastStreakDate === yesterday) ? s.streak + 1 : 1;
+        if (s.streak > s.maxStreak) s.maxStreak = s.streak;
+        s.lastStreakDate = today;
+      }
+      saveStats(s);
+      return s;
+    }
+
+    // ── Score messages ─────────────────────────────────────────
+    function pickMsg(arr) { return arr[Math.floor(Math.random() * 2)]; }
+
+    function scoreMessages(pct) {
+      if (pct === 1)  return {
+        big:   pickMsg(['Outstanding!', 'Perfect score!']),
+        small: pickMsg(['Can you do it again tomorrow?', 'Come back tomorrow and see if you can match it!'])
+      };
+      if (pct >= 0.8) return {
+        big:   pickMsg(['Great work!', 'Sehr gut!']),
+        small: pickMsg(['Really well done. Come back tomorrow!', 'Almost perfect. New puzzle tomorrow!'])
+      };
+      if (pct >= 0.6) return {
+        big:   pickMsg(['Well done!', 'Good effort!']),
+        small: pickMsg(['Solid effort. Keep practising and come back tomorrow!', 'More than halfway there. New puzzle tomorrow!'])
+      };
+      if (pct >= 0.4) return {
+        big:   pickMsg(['Not bad!', 'Getting there!']),
+        small: pickMsg(['Keep going. You\'ve got this. New puzzle tomorrow!', 'Room to improve. Come back tomorrow!'])
+      };
+      if (pct >= 0.2) return {
+        big:   pickMsg(['Keep practising!', 'Don\'t give up!']),
+        small: pickMsg(['Every puzzle makes you better. New one tomorrow!', 'Stick with it. New puzzle tomorrow!'])
+      };
+      return {
+        big:   pickMsg(['Everyone starts somewhere!', 'Blank slate!']),
+        small: pickMsg(['Only one way is up from here. New puzzle tomorrow!', 'It can\'t get worse tomorrow... right? New puzzle awaits!'])
+      };
+    }
+
+    // ── Full story text builder ────────────────────────────────
+    function buildFullStoryText(puzzle) {
+      var story = puzzle.story;
+      if (Array.isArray(story)) {
+        return story.map(function (seg) {
+          return seg.type === 'text' ? seg.content : seg.type === 'blank' ? seg.answer : '';
+        }).join('');
+      }
+      var blanks = puzzle.blanks || [];
+      if (typeof blanks === 'string') { try { blanks = JSON.parse(blanks); } catch (e) { blanks = []; } }
+      var byId = {};
+      blanks.forEach(function (b) { byId[b.id] = b.answer; });
+      if (/\[\d+\]/.test(story)) {
+        return story.replace(/\[(\d+)\]/g, function (_, n) { return byId[Number(n)] || ('[' + n + ']'); });
+      }
+      var idx = 0;
+      return story.split('___').map(function (seg, i, arr) {
+        return i < arr.length - 1 ? seg + (blanks[idx] ? blanks[idx++].answer : '___') : seg;
+      }).join('');
+    }
+
+    // ── View tracking ──────────────────────────────────────────
+    async function submitView(date, level) {
+      var storageKey = 'blankle_view_' + date + '_' + level;
+      if (localStorage.getItem(storageKey)) return;
+      localStorage.setItem(storageKey, '1');
+      try {
+        var ipHash = null;
+        try {
+          var ipRes  = await fetch('https://api.ipify.org?format=json');
+          var ipData = await ipRes.json();
+          if (ipData.ip && window.crypto && window.crypto.subtle) {
+            var encoded = new TextEncoder().encode(ipData.ip);
+            var hashBuf = await window.crypto.subtle.digest('SHA-256', encoded);
+            ipHash = Array.from(new Uint8Array(hashBuf))
+              .map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+          }
+        } catch (_) {}
+        await fetch(SUPABASE_URL + '/rest/v1/views', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ date: date, level: level, ip_hash: ipHash })
+        });
+      } catch (_) {}
+    }
+
+    // ── Patch renderPuzzle ─────────────────────────────────────
+    var _origRender = window.renderPuzzle;
+    window.renderPuzzle = function (puzzle) {
+      window._currentPuzzle = puzzle;
+      var s = document.getElementById('full-story-section');
+      if (s) s.hidden = true;
+      var rt = resultsTimeEl();
+      if (rt) rt.hidden = true;
+      startTimer();
+      var result = _origRender(puzzle);
+      var badge = document.getElementById('puzzle-level-badge');
+      if (badge) badge.textContent = LEVEL_NAMES[puzzle.level] || puzzle.level;
+      if (!_isArchivePuzzle) submitView(_todayStr, puzzle.level);
+      return result;
+    };
+
+    // ── Patch showResults ──────────────────────────────────────
+    var _origShowResults = window.showResults;
+    window.showResults = function (score, maxScore, groups, userAnswers) {
+      var isFresh = _userChecked;
+      var finalTime = null;
+      if (_userChecked) {
+        finalTime = stopTimer();
+        _userChecked = false;
+        // Persist completion time into the entry app.js just saved
+        var _pLevel = (window._currentPuzzle && window._currentPuzzle.level) || 'A1';
+        try {
+          var _k = 'luckentext_' + _todayStr + '_' + _pLevel;
+          var _entry = JSON.parse(localStorage.getItem(_k) || '{}');
+          _entry.finalTime = finalTime;
+          localStorage.setItem(_k, JSON.stringify(_entry));
+        } catch (_e) {}
+      } else {
+        stopTimer();
+        // Restore saved completion time so share text matches the original run
+        var _puz = window._currentPuzzle;
+        if (_puz) {
+          try {
+            var _raw = localStorage.getItem('luckentext_' + _todayStr + '_' + _puz.level);
+            var _saved = _raw ? JSON.parse(_raw) : null;
+            if (_saved && _saved.finalTime) finalTime = _saved.finalTime;
+          } catch (_e) {}
+        }
+      }
+      var el = timerEl();
+      if (el) el.hidden = true;
+
+      var _wbSection = document.querySelector('.word-bank-section');
+      if (_wbSection) _wbSection.hidden = true;
+
+      _origShowResults(score, maxScore, groups, userAnswers);
+
+      // Overwrite puzzle-page label with randomised message
+      var pct  = maxScore > 0 ? score / maxScore : 0;
+      var msgs = scoreMessages(pct);
+      var labelEl = document.getElementById('results-label');
+      if (labelEl) labelEl.textContent = msgs.small;
+
+      window._lastResults = { score: score, maxScore: maxScore, groups: groups, userAnswers: userAnswers, finalTime: finalTime };
+
+      if (finalTime) {
+        var rt = resultsTimeEl();
+        if (rt) { rt.textContent = finalTime; rt.hidden = false; }
+      }
+
+      // Inline full story (below results panel)
+      var puzzle = window._currentPuzzle;
+      if (puzzle) {
+        var text = buildFullStoryText(puzzle);
+        var fsEl = document.getElementById('full-story-text');
+        var fsSection = document.getElementById('full-story-section');
+        if (fsEl && fsSection) { fsEl.textContent = text; fsSection.hidden = false; }
+      }
+
+      if (isFresh && !_isArchivePuzzle) {
+        var level = (window._currentPuzzle && window._currentPuzzle.level) || 'A1';
+        updateStats(score, maxScore);
+        showResultsModal(score, maxScore, finalTime, level, msgs);
+        submitScore(_todayStr, level, score, _timerSeconds);
+      }
+    };
+
+    // ── Modal ──────────────────────────────────────────────────
+    function showResultsModal(score, maxScore, finalTime, level, msgs) {
+      var stats = loadStats();
+      var puzzle = window._currentPuzzle;
+      var num = getPuzzleNumber(puzzle && puzzle.date);
+      var numEl = document.getElementById('modal-puzzle-num');
+      if (numEl) numEl.textContent = num != null ? 'BL_NKLE #' + num : '';
+
+      document.getElementById('modal-perf-msg').textContent  = msgs.big;
+      document.getElementById('modal-score-msg').textContent = msgs.small;
+      document.getElementById('stat-completed').textContent  = stats.completed;
+      document.getElementById('stat-perfect').textContent    = stats.perfect;
+      document.getElementById('stat-streak').textContent     = stats.streak;
+      document.getElementById('stat-max-streak').textContent = stats.maxStreak;
+
+      document.getElementById('modal-score-number').textContent = score;
+      document.getElementById('modal-score-denom').textContent  = '/' + maxScore;
+      var mTime = document.getElementById('modal-score-time');
+      if (finalTime) { mTime.textContent = finalTime; mTime.hidden = false; }
+      else { mTime.hidden = true; }
+
+      document.getElementById('results-modal').hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('results-modal').hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    // ── Score submission ───────────────────────────────────────
+    async function submitScore(date, level, score, timeSeconds) {
+      try {
+        var ipHash = null;
+        try {
+          var ipRes  = await fetch('https://api.ipify.org?format=json');
+          var ipData = await ipRes.json();
+          if (ipData.ip && window.crypto && window.crypto.subtle) {
+            var encoded = new TextEncoder().encode(ipData.ip);
+            var hashBuf = await window.crypto.subtle.digest('SHA-256', encoded);
+            ipHash = Array.from(new Uint8Array(hashBuf))
+              .map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+          }
+        } catch (_) {}
+
+        await fetch(SUPABASE_URL + '/rest/v1/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            date: date,
+            level: level,
+            score: score,
+            time_seconds: timeSeconds,
+            ip_hash: ipHash
+          })
+        });
+      } catch (_) {}
+    }
+
+    // ── Share helpers ──────────────────────────────────────────
+    var LEVEL_NAMES = { A1: 'Beginner', A2: 'Easy', B1: 'Medium', B2: 'Hard' };
+
+    function getPuzzleNumber(dateStr) {
+      var d = dateStr ? new Date(dateStr + 'T00:00:00Z') : new Date();
+      var utcMs = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+      return Math.floor((utcMs - LAUNCH_DATE.getTime()) / 86400000) + 1;
+    }
+
+    function buildShareText(r, p) {
+      var level      = (p && p.level) || 'A1';
+      var levelName  = LEVEL_NAMES[level] || level;
+      var num        = getPuzzleNumber(p && p.date);
+      var grid       = r.groups.map(function (g) {
+        return g.blanks.every(function (b) { return r.userAnswers[b.id] === b.answer; }) ? '🟩' : '🟥';
+      }).join('');
+      var line1 = 'BL_NKLE' + (num != null ? ' #' + num : '') + ' · ' + levelName;
+      var line2 = r.score + '/' + r.maxScore + (r.finalTime ? ' · ' + r.finalTime : '');
+      return line1 + '\n' + line2 + '\n' + grid + '\nblankle.com';
+    }
+
+    // ── Modal share ────────────────────────────────────────────
+    function modalShareCopy() {
+      var r = window._lastResults;
+      var p = window._currentPuzzle;
+      if (!r || !p) return;
+      var text  = buildShareText(r, p);
+      var toast = document.getElementById('modal-share-toast');
+      function onCopied() {
+        if (toast) { toast.textContent = '✓ Copied!'; setTimeout(function () { toast.textContent = ''; }, 2500); }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onCopied).catch(function () { fbCopy(text, onCopied); });
+      } else { fbCopy(text, onCopied); }
+    }
+
+    function fbCopy(text, onSuccess) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      Object.assign(ta.style, { position: 'fixed', top: '-9999px', opacity: '0' });
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try { document.execCommand('copy'); onSuccess(); } catch (_) {}
+      document.body.removeChild(ta);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var headerDateEl = document.getElementById('header-date');
+      var puzzleDateStr = _isArchivePuzzle ? _urlDate : _todayStr;
+      var num = getPuzzleNumber(puzzleDateStr);
+      var numPrefix = num != null ? '#' + num + ' · ' : '';
+      if (_isArchivePuzzle) {
+        headerDateEl.textContent = numPrefix + 'Archive';
+        document.getElementById('share-btn').hidden = true;
+        document.getElementById('show-results-btn').hidden = true;
+      } else {
+        headerDateEl.textContent = numPrefix + new Date().toLocaleDateString('en-US', {
+          month: 'long', day: 'numeric', year: 'numeric'
+        });
+      }
+
+      // Capture-phase: must be true so it fires before app.js's checkAnswers bubble handler
+      document.getElementById('check-btn').addEventListener('click', function () {
+        _userChecked = true;
+      }, true);
+
+      document.getElementById('show-results-btn').addEventListener('click', function () {
+        var r = window._lastResults;
+        var p = window._currentPuzzle;
+        if (!r) return;
+        var level = (p && p.level) || 'A1';
+        var pct   = r.maxScore > 0 ? r.score / r.maxScore : 0;
+        var msgs  = scoreMessages(pct);
+        showResultsModal(r.score, r.maxScore, r.finalTime, level, msgs);
+      });
+
+      // Theme init — syncs toggle to saved preference
+      applyTheme(isDark());
+
+      document.getElementById('settings-btn').addEventListener('click', function () {
+        document.getElementById('settings-modal').hidden = false;
+        document.body.style.overflow = 'hidden';
+      });
+      document.getElementById('settings-close').addEventListener('click', function () {
+        document.getElementById('settings-modal').hidden = true;
+        document.body.style.overflow = '';
+      });
+      document.getElementById('settings-modal').addEventListener('click', function (e) {
+        if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+      });
+      document.getElementById('dark-mode-toggle').addEventListener('click', function () {
+        var dark = !isDark();
+        localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+        applyTheme(dark);
+      });
+
+      document.getElementById('help-btn').addEventListener('click', function () {
+        document.getElementById('htp-modal').hidden = false;
+        document.body.style.overflow = 'hidden';
+      });
+      document.getElementById('htp-close').addEventListener('click', function () {
+        document.getElementById('htp-modal').hidden = true;
+        document.body.style.overflow = '';
+      });
+      document.getElementById('htp-modal').addEventListener('click', function (e) {
+        if (e.target === this) { this.hidden = true; document.body.style.overflow = ''; }
+      });
+
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      document.getElementById('results-modal').addEventListener('click', function (e) {
+        if (e.target === this) closeModal();
+      });
+      document.getElementById('modal-share-btn').addEventListener('click', modalShareCopy);
+
+      // Intercept puzzle-page share button before app.js handles it
+      document.getElementById('share-btn').addEventListener('click', function (e) {
+        e.stopImmediatePropagation();
+        var r = window._lastResults;
+        var p = window._currentPuzzle;
+        if (!r || !p) return;
+        var text  = buildShareText(r, p);
+        var toast = document.getElementById('share-toast');
+        function onCopied() {
+          if (toast) { toast.textContent = '✓ Copied!'; setTimeout(function () { toast.textContent = ''; }, 2500); }
+        }
+        if (navigator.share) {
+          navigator.share({ text: text }).catch(function () {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(onCopied).catch(function () { fbCopy(text, onCopied); });
+        } else { fbCopy(text, onCopied); }
+      }, true);
+
+      var lvl = new URLSearchParams(location.search).get('level');
+      if (lvl && lvl !== 'A1') {
+        var tab = document.querySelector('.level-tab[data-level="' + lvl + '"]');
+        if (tab) tab.click();
+      }
+    });
+  </script>
+
+  <div id="settings-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="settings-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <h2 class="htp-title">Settings</h2>
+      <div class="settings-row">
+        <span class="settings-label">Dark mode</span>
+        <button class="toggle-btn" id="dark-mode-toggle" role="switch" aria-checked="false">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="htp-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="htp-close">Back to puzzle <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <h2 class="htp-title">How to Play</h2>
+      <ol class="htp-steps">
+        <li>Read the story. Each blank is numbered and marked with a line.</li>
+        <li>Type your answer into each blank. The word bank shows you which words to use.</li>
+        <li>The word bank shows words differently depending on your level:
+          <ul class="htp-subbullets">
+            <li><strong>Beginner:</strong> type the exact word shown</li>
+            <li><strong>Easy:</strong> verbs appear as infinitives, conjugate them correctly</li>
+            <li><strong>Medium and Hard:</strong> all words must be correctly inflected or declined</li>
+          </ul>
+        </li>
+        <li>Press <strong>Check answers</strong> when you are ready to see your score.</li>
+        <li>A new puzzle drops every day at four levels: <strong>Beginner, Easy, Medium</strong> and <strong>Hard</strong>.</li>
+        <li>Share your score with friends and try to get that perfect BL_NKLE.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div id="results-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="modal-close">Back to puzzle <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="modal-puzzle-num" id="modal-puzzle-num"></p>
+      <p class="modal-perf-msg" id="modal-perf-msg"></p>
+      <div class="modal-stats">
+        <div class="modal-stat">
+          <span class="modal-stat-value" id="stat-completed">0</span>
+          <span class="modal-stat-label">Completed<br>BL_NKLES</span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-value" id="stat-perfect">0</span>
+          <span class="modal-stat-label">Perfect<br>BL_NKLES</span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-value" id="stat-streak">0</span>
+          <span class="modal-stat-label">Current<br>Streak</span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-value" id="stat-max-streak">0</span>
+          <span class="modal-stat-label">Max<br>Streak</span>
+        </div>
+      </div>
+      <div class="modal-score-block">
+        <div class="modal-score-display">
+          <span class="modal-score-number" id="modal-score-number"></span>
+          <span class="modal-score-denom" id="modal-score-denom"></span>
+        </div>
+        <p class="modal-score-msg" id="modal-score-msg"></p>
+        <p class="modal-score-time" id="modal-score-time" hidden></p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%;">
+        <button class="modal-share-btn" id="modal-share-btn">Share result</button>
+        <p class="modal-share-toast" id="modal-share-toast" role="status" aria-live="polite"></p>
+        <a class="modal-play-another-btn" href="index.html">Play Another Difficulty</a>
+      </div>
+      <div id="modal-full-story" hidden>
+        <p id="modal-story-text"></p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

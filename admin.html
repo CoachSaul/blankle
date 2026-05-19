@@ -1,0 +1,3214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BL_NKLE Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --brand:       #2eb4fb;
+      --brand-dark:  #0d9fe8;
+      --brand-light: rgba(46, 180, 251, 0.07);
+      --brand-mid:   rgba(46, 180, 251, 0.18);
+    }
+
+    [hidden] { display: none !important; }
+
+    /* ── Login ──────────────────────────────────────── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      max-width: 340px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .login-logo-mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 2px solid #000;
+      border-radius: 12px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: bold;
+      font-size: 26px;
+      color: #000;
+    }
+
+    .login-title {
+      font-family: var(--font-story);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .text-input {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.14s;
+      -webkit-appearance: none;
+    }
+    .text-input:focus { border-color: var(--brand); }
+
+    .login-error {
+      font-size: 13px;
+      color: var(--incorrect);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* ── Admin header ───────────────────────────────── */
+    .admin-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .admin-header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .admin-logo-mark {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #000;
+      border-radius: 8px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: bold;
+      font-size: 17px;
+      color: #000;
+    }
+
+    .admin-logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.2px;
+    }
+
+    .admin-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--brand);
+      background: var(--brand-light);
+      border: 1px solid var(--brand-mid);
+      border-radius: 5px;
+      padding: 2px 7px;
+    }
+
+    .logout-btn {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: border-color 0.14s, color 0.14s;
+    }
+    .logout-btn:hover { border-color: #aaa; color: var(--text); }
+
+    /* ── Admin main ─────────────────────────────────── */
+    .admin-main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── Form card ──────────────────────────────────── */
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin-bottom: 36px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .level-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .api-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .api-row .form-group { flex: 1; min-width: 260px; }
+
+    /* ── Generate error ─────────────────────────────── */
+    .gen-error {
+      font-size: 13px;
+      color: var(--incorrect);
+      font-weight: 500;
+      padding: 10px 14px;
+      background: var(--incorrect-bg);
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── Preview section ────────────────────────────── */
+    #preview-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .preview-mode-bar {
+      display: flex;
+      gap: 6px;
+    }
+    .preview-mode-btn {
+      padding: 5px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      background: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+      -webkit-appearance: none;
+    }
+    .preview-mode-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .preview-mode-btn.active {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .save-status {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+    }
+    .save-status.success { background: var(--correct-bg);   color: var(--correct);   }
+    .save-status.error   { background: var(--incorrect-bg); color: var(--incorrect); }
+
+    /* ── Editable story segments ─────────────────────── */
+    .story-segment {
+      border-radius: 3px;
+      cursor: text;
+      outline: none;
+      white-space: pre-wrap;
+      transition: background 0.13s;
+      position: relative;
+    }
+    .story-segment:hover  { background: rgba(46, 180, 251, 0.09); }
+    .story-segment:focus  {
+      background: rgba(46, 180, 251, 0.13);
+      box-shadow: inset 0 0 0 1px rgba(46, 180, 251, 0.3);
+    }
+    .story-segment:hover::after {
+      content: '✏';
+      font-size: 9px;
+      position: absolute;
+      top: -8px;
+      right: 1px;
+      color: var(--brand);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .editable-title {
+      cursor: text;
+      border-radius: 4px;
+      outline: none;
+      transition: background 0.13s;
+    }
+    .editable-title:hover { background: rgba(46, 180, 251, 0.09); }
+    .editable-title:focus {
+      background: rgba(46, 180, 251, 0.13);
+      box-shadow: inset 0 0 0 1px rgba(46, 180, 251, 0.3);
+    }
+
+    /* ── Editable base form input ────────────────────── */
+    .blank-base-edit {
+      display: block;
+      width: 100%;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--brand);
+      text-align: center;
+      background: transparent;
+      border: none;
+      border-bottom: 1px dashed var(--brand-mid);
+      outline: none;
+      padding: 2px 2px 1px;
+      margin-top: 4px;
+      transition: border-color 0.13s;
+      cursor: text;
+    }
+    .blank-base-edit:hover { border-bottom-color: var(--brand); }
+    .blank-base-edit:focus { border-bottom-color: var(--brand); color: var(--text); }
+    .preview-text-seg {
+      cursor: text;
+      border-radius: 2px;
+      padding: 1px 0;
+    }
+    .preview-text-seg:hover { background: rgba(0,0,0,0.04); }
+    .preview-text-edit {
+      font: inherit;
+      color: var(--text);
+      background: var(--brand-light);
+      border: none;
+      border-bottom: 1.5px solid var(--brand);
+      border-radius: 2px 2px 0 0;
+      outline: none;
+      padding: 1px 3px;
+      min-width: 20px;
+    }
+    .preview-word {
+      cursor: pointer;
+      border-radius: 2px;
+      padding: 1px 0;
+      transition: background 0.1s, color 0.1s;
+    }
+    .preview-word:hover { background: var(--brand-light); color: var(--brand); }
+    .preview-blank-remove {
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      padding: 0 2px;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-radius: 2px;
+      opacity: 0.45;
+      transition: opacity 0.1s, color 0.1s;
+      margin-left: 2px;
+      vertical-align: middle;
+    }
+    .preview-blank-remove:hover { opacity: 1; color: var(--incorrect, #e05252); }
+
+    /* ── Submit tab ─────────────────────────────────── */
+    .submit-textarea {
+      resize: vertical;
+      min-height: 160px;
+      font-family: var(--font-story);
+      font-size: 15px;
+      line-height: 1.7;
+      box-sizing: border-box;
+    }
+
+    .submit-word {
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 1px 2px;
+      display: inline-block;
+      vertical-align: bottom;
+      line-height: 1.4;
+      transition: background 0.1s;
+    }
+    .submit-word:hover { background: rgba(46, 180, 251, 0.15); }
+    .submit-word.is-blank {
+      background: rgba(46, 180, 251, 0.18);
+      border-bottom: 2px solid var(--brand);
+      color: var(--brand);
+    }
+
+    .submit-blank-label {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--brand);
+      text-align: center;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .submit-blank-counter {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .submit-blank-counter.full { color: var(--brand); }
+
+    .submit-word-popup {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      width: 260px;
+    }
+
+    /* ── Tabs ───────────────────────────────────────── */
+    .admin-tabs {
+      display: flex;
+      border-bottom: 1.5px solid var(--border);
+      margin-bottom: 32px;
+    }
+    .admin-tab {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 22px;
+      background: none;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -1.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.14s, border-color 0.14s;
+      -webkit-appearance: none;
+    }
+    .admin-tab:hover  { color: var(--text); }
+    .admin-tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+
+    /* ── Manage list ─────────────────────────────────── */
+    .manage-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .manage-row:first-child { border-top: 1px solid var(--border); }
+    .manage-date {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 110px;
+      padding-top: 10px;
+      flex-shrink: 0;
+    }
+    .manage-date-num {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+    .manage-slots { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; }
+    .manage-slot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      min-width: 130px;
+      max-width: 210px;
+    }
+    .manage-slot.has-puzzle {
+      cursor: pointer;
+      border-color: var(--correct);
+      transition: background 0.13s;
+    }
+    .manage-slot.has-puzzle:hover { background: var(--correct-bg); }
+    .manage-slot.empty { opacity: 0.4; cursor: default; }
+    .slot-tick  { color: var(--correct); font-weight: 700; font-size: 12px; flex-shrink: 0; }
+    .slot-dash  { color: var(--text-muted); font-size: 12px; flex-shrink: 0; }
+    .slot-level { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; color: var(--text-muted); flex-shrink: 0; }
+    .slot-title {
+      font-family: var(--font-story);
+      font-size: 12px;
+      font-style: italic;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Manage modal ─────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .manage-modal-panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
+    .manage-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .manage-modal-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .manage-modal-body {
+      overflow-y: auto;
+      flex: 1;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .manage-modal-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 28px 22px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .manage-close-btn {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: color 0.14s;
+      flex-shrink: 0;
+    }
+    .manage-close-btn:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .manage-row { flex-direction: column; gap: 8px; }
+      .manage-date { min-width: 0; padding-top: 0; }
+      .manage-slot { min-width: 0; max-width: none; flex: 1 1 calc(50% - 4px); }
+      .manage-modal-header, .manage-modal-body, .manage-modal-footer { padding-left: 20px; padding-right: 20px; }
+    }
+
+    /* ── Puzzle stats (shared: Puzzle Stats modal) ──────── */
+    .puzzle-stat-summary {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .puzzle-stat-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 90px;
+    }
+    .puzzle-stat-num {
+      font-family: var(--font-story);
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--brand);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .puzzle-stat-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .score-dist {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .score-dist-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .score-dist-label {
+      font-size: 12px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      width: 36px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .score-dist-track {
+      flex: 1;
+      height: 10px;
+      background: var(--brand-light);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .score-dist-bar {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 100px;
+      transition: width 0.3s ease;
+    }
+    .score-dist-count {
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      width: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── Puzzle Stats tab ──────────────────────────────────── */
+    .ps-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid transparent;
+      background: var(--card);
+      min-width: 130px;
+      max-width: 210px;
+      cursor: pointer;
+      transition: background 0.13s;
+      -webkit-appearance: none;
+      text-align: left;
+    }
+    .ps-pill:hover { background: rgba(0,0,0,0.04); }
+    .ps-pill--none   { border-color: #888; }
+    .ps-pill--low    { border-color: #e05252; }
+    .ps-pill--mid    { border-color: #d4920a; }
+    .ps-pill--high   { border-color: #27ae60; }
+    .ps-pill--none:hover { background: rgba(136,136,136,0.08); }
+    .ps-pill--low:hover  { background: rgba(224, 82, 82,0.08); }
+    .ps-pill--mid:hover  { background: rgba(212,146, 10,0.08); }
+    .ps-pill--high:hover { background: rgba( 39,174, 96,0.08); }
+    .ps-pill-row1 {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      width: 100%;
+      min-width: 0;
+    }
+    .ps-pill-level {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .ps-pill-title {
+      font-family: var(--font-story);
+      font-size: 12px;
+      font-style: italic;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    }
+    .ps-pill-row2 {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Overview date range filter ─────────────────────── */
+    .overview-date-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .overview-date-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+    .overview-date-custom {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .overview-date-input {
+      padding: 5px 10px;
+      font-size: 13px;
+      width: auto;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      color: var(--text);
+      font-family: inherit;
+    }
+    .overview-date-input:focus { outline: none; border-color: var(--brand); }
+    .overview-date-sep { font-size: 13px; color: var(--text-muted); }
+    .overview-date-apply {
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 100px;
+      border: 1.5px solid var(--brand);
+      background: var(--brand-light);
+      color: var(--brand);
+      cursor: pointer;
+      -webkit-appearance: none;
+    }
+    .overview-date-apply:hover { background: var(--brand-mid); }
+
+    /* ── Overview level filter ──────────────────────────── */
+    .overview-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .overview-filter-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 13px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+      -webkit-appearance: none;
+    }
+    .overview-filter-pill:hover { border-color: var(--brand); color: var(--brand); }
+    .overview-filter-pill.active {
+      border-color: var(--brand);
+      background: var(--brand-light);
+      color: var(--brand);
+    }
+
+    /* ── Daily bar chart ────────────────────────────────── */
+    .day-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 100px;
+      position: relative;
+    }
+    .day-chart-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      flex: 1;
+      height: 100%;
+      cursor: default;
+      position: relative;
+    }
+    .day-chart-col:hover .day-chart-bar { opacity: 0.75; }
+    .day-chart-col:hover .day-chart-tip { display: block; }
+    .day-chart-bar {
+      width: 100%;
+      background: var(--brand);
+      border-radius: 3px 3px 0 0;
+      min-height: 2px;
+      transition: opacity 0.1s;
+    }
+    .day-chart-bar.today { background: var(--brand-dark); }
+    .day-chart-labels {
+      display: flex;
+      gap: 3px;
+      padding-top: 4px;
+    }
+    .day-chart-label {
+      flex: 1;
+      font-size: 9px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: center;
+      line-height: 1;
+    }
+    .day-chart-tip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: var(--bg);
+      font-size: 11px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* ── Stats tab ──────────────────────────────────────── */
+    .stats-summary {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .stats-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 130px;
+      flex: 1;
+    }
+    .stats-value {
+      font-family: var(--font-story);
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--brand);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .stats-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .stats-section {
+      margin-bottom: 36px;
+    }
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .stats-table th {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .stats-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .stats-table tr:last-child td { border-bottom: none; }
+    .stats-table tbody tr:hover td { background: var(--brand-light); }
+    .stats-level-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--brand-light);
+      color: var(--brand);
+      border: 1px solid var(--brand-mid);
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo-mark">b</div>
+    <p class="login-title">Admin</p>
+    <div class="login-form">
+      <input type="password" id="password-input" class="text-input"
+             placeholder="Password" autocomplete="current-password">
+      <button class="btn btn-primary" id="login-btn">Enter</button>
+      <p class="login-error" id="login-error" hidden>Incorrect password.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ADMIN ═══════════════ -->
+<div id="admin-screen" hidden>
+
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <div class="admin-logo-mark">b</div>
+        <span class="admin-logo-text">BL_NKLE</span>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <button class="logout-btn" id="logout-btn">Log out</button>
+    </div>
+  </header>
+
+  <div class="admin-main">
+
+    <!-- Tab navigation -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="generate">Generate</button>
+      <button class="admin-tab" data-tab="manage">Manage</button>
+      <button class="admin-tab" data-tab="submit">Submit</button>
+      <button class="admin-tab" data-tab="overview">Overview</button>
+      <button class="admin-tab" data-tab="puzzle-stats">Puzzle Stats</button>
+    </div>
+
+    <!-- Generate tab -->
+    <div id="tab-generate">
+
+      <div class="form-card">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="date-input">Date</label>
+            <input type="date" id="date-input" class="text-input" style="width:190px;">
+          </div>
+          <div class="form-group">
+            <span class="form-label">Level</span>
+            <div class="level-tabs" role="group" aria-label="Level">
+              <button class="level-tab active" data-level="A1">Beginner</button>
+              <button class="level-tab" data-level="A2">Easy</button>
+              <button class="level-tab" data-level="B1">Medium</button>
+              <button class="level-tab" data-level="B2">Hard</button>
+              <button class="level-tab" data-level="C1">Expert</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="width:100%;">
+          <label class="form-label" for="theme-input">Theme (optional)</label>
+          <input type="text" id="theme-input" class="text-input" placeholder="Enter a theme...">
+        </div>
+        <div class="api-row">
+          <div class="form-group">
+            <label class="form-label" for="api-key-input">Claude API Key</label>
+            <input type="password" id="api-key-input" class="text-input"
+                   placeholder="sk-ant-…" autocomplete="off">
+          </div>
+          <button class="btn btn-primary" id="generate-btn">Generate</button>
+        </div>
+        <p class="gen-error" id="gen-error" hidden></p>
+      </div>
+
+      <div id="preview-section" hidden>
+        <div class="puzzle-meta">
+          <h1 class="puzzle-title" id="preview-title"></h1>
+          <span class="level-badge" id="preview-badge"></span>
+        </div>
+        <p id="preview-topic" style="font-size:12px; color:var(--text-muted); margin: -8px 0 16px; font-style:italic;" hidden></p>
+        <div class="preview-mode-bar">
+          <button class="preview-mode-btn" id="mode-btn-blanks">Edit blanks</button>
+          <button class="preview-mode-btn" id="mode-btn-text">Edit text</button>
+        </div>
+        <div class="story-card">
+          <div class="story-text" id="preview-story"></div>
+        </div>
+        <div class="word-bank-section">
+          <p class="section-label">Word bank</p>
+          <div class="word-bank" id="preview-word-bank"></div>
+        </div>
+        <div class="word-bank-section" id="preview-full-story-section">
+          <p class="section-label">Full story preview</p>
+          <p id="preview-full-story" style="font-family: var(--font-story); font-size: 15px; line-height: 1.9; color: var(--text);"></p>
+        </div>
+        <div class="preview-actions">
+          <button class="btn btn-primary" id="approve-btn">Approve &amp; Save</button>
+          <button class="btn btn-ghost" id="regenerate-btn">Regenerate</button>
+          <span class="save-status" id="save-status" hidden></span>
+        </div>
+      </div>
+
+    </div><!-- /tab-generate -->
+
+    <!-- Manage tab -->
+    <div id="tab-manage" hidden>
+      <div id="manage-loading" class="state-panel">
+        <div class="spinner"></div>
+        <p>Loading puzzles…</p>
+      </div>
+      <div id="manage-error" class="state-panel" hidden>
+        <p class="error-icon">⚠️</p>
+        <p class="error-message">Could not load puzzles.</p>
+      </div>
+      <div id="manage-content" hidden>
+        <div id="manage-list"></div>
+      </div>
+    </div><!-- /tab-manage -->
+
+    <!-- Submit tab -->
+    <div id="tab-submit" hidden>
+
+      <div class="form-card">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="submit-date-input">Date</label>
+            <input type="date" id="submit-date-input" class="text-input" style="width:190px;">
+          </div>
+          <div class="form-group">
+            <span class="form-label">Level</span>
+            <div class="level-tabs" role="group" aria-label="Level">
+              <button class="submit-level-tab active" data-level="A1">Beginner</button>
+              <button class="submit-level-tab" data-level="A2">Easy</button>
+              <button class="submit-level-tab" data-level="B1">Medium</button>
+              <button class="submit-level-tab" data-level="B2">Hard</button>
+              <button class="submit-level-tab" data-level="C1">Expert</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="width:100%;">
+          <label class="form-label" for="submit-title-input">Title</label>
+          <input type="text" id="submit-title-input" class="text-input" placeholder="Puzzle title...">
+        </div>
+        <div class="form-group" style="width:100%;">
+          <label class="form-label" for="submit-story-input">Story</label>
+          <textarea id="submit-story-input" class="text-input submit-textarea" placeholder="Paste your German story here..."></textarea>
+        </div>
+        <div>
+          <button class="btn btn-primary" id="submit-load-btn">Load story</button>
+        </div>
+      </div>
+
+      <div id="submit-preview-section" style="display:none; flex-direction:column; gap:20px;">
+        <div class="puzzle-meta">
+          <h1 class="puzzle-title" id="submit-preview-title"></h1>
+          <span class="level-badge" id="submit-preview-badge"></span>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <p class="form-label" style="margin:0;">Click words to make them blanks. Click a blank to remove it.</p>
+          <span id="submit-blank-counter" class="submit-blank-counter">0 / 10 blanks</span>
+        </div>
+        <div class="story-card">
+          <div class="story-text" id="submit-story-display" style="line-height:3.2em;"></div>
+        </div>
+        <div class="preview-actions">
+          <button class="btn btn-primary" id="submit-approve-btn" disabled>Approve &amp; Save</button>
+          <button class="btn btn-ghost" id="submit-reset-btn">Reset</button>
+          <span class="save-status" id="submit-save-status" hidden></span>
+        </div>
+      </div>
+
+    </div><!-- /tab-submit -->
+
+    <!-- Overview tab -->
+    <div id="tab-overview" hidden>
+      <div id="stats-loading" class="state-panel">
+        <div class="spinner"></div>
+        <p>Loading stats…</p>
+      </div>
+      <div id="stats-error" class="state-panel" hidden>
+        <p class="error-icon">⚠️</p>
+        <p class="error-message">Could not load stats.</p>
+      </div>
+      <div id="stats-content" hidden>
+
+        <div class="overview-date-bar" id="overview-date-bar">
+          <div class="overview-date-presets" id="overview-date-presets"></div>
+          <div class="overview-date-custom" id="overview-date-custom" hidden>
+            <input type="date" id="overview-date-from" class="overview-date-input">
+            <span class="overview-date-sep">to</span>
+            <input type="date" id="overview-date-to" class="overview-date-input">
+            <button type="button" class="overview-date-apply" id="overview-date-apply">Apply</button>
+          </div>
+        </div>
+
+        <div class="overview-filter" id="overview-filter"></div>
+
+        <div class="stats-summary">
+          <div class="stats-card">
+            <span class="stats-value" id="stat-total-plays">—</span>
+            <span class="stats-card-label">Total plays</span>
+          </div>
+          <div class="stats-card">
+            <span class="stats-value" id="stat-today-plays">—</span>
+            <span class="stats-card-label">Today</span>
+          </div>
+          <div class="stats-card">
+            <span class="stats-value" id="stat-overall-avg">—</span>
+            <span class="stats-card-label">Avg score</span>
+          </div>
+        </div>
+
+        <div class="stats-section">
+          <p class="section-label">Plays per day</p>
+          <div id="stats-daily"></div>
+        </div>
+
+        <div class="stats-section" id="stats-by-level-section">
+          <p class="section-label">Breakdown by level</p>
+          <div id="stats-by-level"></div>
+        </div>
+
+        <div class="stats-section" id="stats-completion-section">
+          <p class="section-label">Completion rate</p>
+          <div id="stats-completion"></div>
+        </div>
+
+        <div class="stats-section">
+          <p class="section-label">Avg score by level per week</p>
+          <div id="stats-weekly"></div>
+        </div>
+
+        <div class="stats-section">
+          <p class="section-label">Recent scores</p>
+          <div id="stats-recent"></div>
+        </div>
+
+      </div>
+    </div><!-- /tab-overview -->
+
+    <!-- Puzzle Stats tab -->
+    <div id="tab-puzzle-stats" hidden>
+      <div id="ps-loading" class="state-panel">
+        <div class="spinner"></div>
+        <p>Loading puzzle stats…</p>
+      </div>
+      <div id="ps-error" class="state-panel" hidden>
+        <p class="error-icon">⚠️</p>
+        <p class="error-message">Could not load puzzle stats.</p>
+      </div>
+      <div id="ps-content" hidden></div>
+    </div><!-- /tab-puzzle-stats -->
+
+  </div>
+</div>
+
+<div id="puzzle-stats-modal" class="modal-overlay" hidden>
+  <div class="manage-modal-panel" style="max-width:480px;">
+    <div class="manage-modal-header">
+      <div class="manage-modal-title-row">
+        <h2 class="puzzle-title" id="ps-modal-title"></h2>
+        <span class="level-badge" id="ps-modal-badge"></span>
+      </div>
+      <button class="manage-close-btn" id="ps-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="manage-modal-body" id="ps-modal-body"></div>
+  </div>
+</div>
+
+<div id="manage-modal" class="modal-overlay" hidden>
+  <div class="manage-modal-panel">
+    <div class="manage-modal-header">
+      <div class="manage-modal-title-row">
+        <h2 class="puzzle-title" id="manage-modal-title"></h2>
+        <span class="level-badge" id="manage-modal-badge"></span>
+      </div>
+      <button class="manage-close-btn" id="manage-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <p id="manage-modal-topic" style="font-size:12px; color:var(--text-muted); margin: -12px 28px 4px; font-style:italic;" hidden></p>
+    <div class="manage-modal-body">
+      <div class="story-card">
+        <div class="story-text" id="manage-story"></div>
+      </div>
+      <div class="word-bank-section">
+        <p class="section-label">Word bank</p>
+        <div class="word-bank" id="manage-word-bank"></div>
+      </div>
+      <div class="word-bank-section">
+        <p class="section-label">Full story</p>
+        <p id="manage-full-story" style="font-family: var(--font-story); font-size: 15px; line-height: 1.9; color: var(--text); margin: 0;"></p>
+      </div>
+    </div>
+    <div class="manage-modal-footer">
+      <button class="btn btn-primary" id="manage-save-btn">Save changes</button>
+      <button class="btn btn-ghost" id="manage-delete-btn">Delete puzzle</button>
+      <span class="save-status" id="manage-status" hidden></span>
+    </div>
+  </div>
+</div>
+
+<!-- Submit word popup -->
+<div id="submit-word-popup" class="submit-word-popup" style="display:none; position:fixed; z-index:300;">
+  <p class="form-label" id="submit-popup-word-label" style="margin-bottom:10px; font-size:13px; color:var(--text);"></p>
+  <div class="form-group" style="margin-bottom:10px;">
+    <label class="form-label" for="submit-popup-base">Base form</label>
+    <input type="text" id="submit-popup-base" class="text-input" style="width:100%;">
+  </div>
+  <div class="form-group" style="margin-bottom:14px;">
+    <label class="form-label" for="submit-popup-pos">Part of speech</label>
+    <select id="submit-popup-pos" class="text-input" style="width:100%;">
+      <option value="verb">Verb</option>
+      <option value="noun">Noun</option>
+      <option value="adjective">Adjective</option>
+      <option value="adverb">Adverb</option>
+      <option value="preposition">Preposition</option>
+      <option value="article">Article</option>
+      <option value="pronoun">Pronoun</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div style="display:flex; gap:8px;">
+    <button class="btn btn-primary" id="submit-popup-confirm" style="flex:1;">Add blank</button>
+    <button class="btn btn-ghost" id="submit-popup-cancel">Cancel</button>
+  </div>
+</div>
+
+<script>
+  /* ── Constants ──────────────────────────────────────────── */
+  const PASSWORD     = 'jimmy86!';
+  const SUPABASE_URL = 'https://mjrllbftoruhvwzedkym.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_e0QYsjxJv0MmgmdWI-tFNw_kxh6mPID';
+  const CLAUDE_MODEL = 'claude-sonnet-4-6';
+  const LEVEL_NAMES  = { A1: 'Beginner', A2: 'Easy', B1: 'Medium', B2: 'Hard', C1: 'Expert' };
+  const LAUNCH_DATE  = new Date('2026-05-20T00:00:00Z');
+  function puzzleNumber(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00Z');
+    return Math.round((d - LAUNCH_DATE) / 86400000) + 1;
+  }
+
+  const GENERATION_PROMPT = `CRITICAL: Your response must be valid JSON only. Start your response with { and end with }. Do not include any text, explanation, preamble or markdown before or after the JSON. If you write anything other than pure JSON your response is invalid.
+
+You are generating a German fill-in-the-blank (cloze) puzzle for language learners. Output valid minified JSON only — no explanation, no markdown, no line breaks inside strings.
+
+Level: {LEVEL}
+Date: {DATE}
+{THEME_LINE}
+
+STORY REQUIREMENTS
+A1 — 8-10 simple sentences. Present tense only. Everyday situations. Simple subject-verb-object structure. No subordinate clauses. Grammar in the story text must be strictly A1 level: present tense only, simple nominative and accusative only (no dative constructions), basic vocabulary only, short simple sentences with clear subject-verb-object structure. If a word or construction would not appear in a basic A1 German course, do not use it. The story text may use naturally declined adjectives (e.g. 'ein kleiner Hund' is fine). However if an adjective IS blanked at A1, the word bank must show the exact declined form as it appears in the sentence — never the uninflected base form.
+A2 — 8-10 sentences. Mix of present and Perfekt tense. Everyday narrative. Some connectors (dann, danach, aber, weil). Vocabulary must be A2 level — avoid advanced or formal words like 'temporär', 'Protokoll', 'Produktion'. Use everyday vocabulary that a student who has completed 6 months of German would know.
+B1 — 9-11 sentences. Mixed tenses including Perfekt and Präteritum. Natural flowing story with subordinate clauses. Varied vocabulary.
+B2 — 9-11 sentences. Complex structures. Konjunktiv II, Passiv, relative clauses. Abstract or reflective topics. C-level vocabulary avoided.
+
+BLANK RULES — exactly 10 blanks per puzzle
+Never more than 2 blanks in the same sentence. Never 3 sentences in a row without a blank.
+
+Fill blanks in priority order for the level until 10 blanks are reached:
+
+A1 PRIORITY:
+1. Other — at least 1 blank (articles: das, ein, die, der; simple adverbs: sehr, auch, nicht)
+2. Nouns — 2-3 blanks (core vocabulary words like Käfig, Brot, Hund)
+3. Adjectives — 1-2 blanks
+4. Verbs — remaining blanks, maximum 5
+STRICT A1 RULES:
+- Never blank separable verbs
+- Never have two consecutive sentences where the only blank is the verb (e.g. "Mia _____." followed by "Er _____." is not allowed)
+- Base form must be IDENTICAL to the answer in every way including any declined endings — if the answer is "kleinen" the base must also be "kleinen", never "klein". If the answer is "trinkt" the base must also be "trinkt", never "trinken". The player types exactly what is shown in the word bank.
+- Base form must match answer capitalisation — if the answer starts a sentence it must be capitalised in both answer and base
+- Base form is never an infinitive or uninflected form at A1
+
+A2 PRIORITY:
+1. Other — at least 1 blank (articles, simple adverbs)
+2. Nouns — 1-2 blanks
+3. Adjectives — 1-2 blanks
+4. Verbs — remaining blanks, maximum 6
+A2 RULES:
+- Articles: base = answer exactly (einen, dem, die etc)
+- Verbs: base = infinitive, answer = correctly conjugated form
+- Everything else: base = answer exactly
+
+B1 PRIORITY:
+1. Other — at least 2 blanks (pronouns, prepositions, particles, conjunctions)
+2. Adjectives — 2-3 blanks (base = uninflected form, answer = correctly declined form)
+3. Verbs — remaining blanks (base = infinitive, answer = correct conjugated/participial form)
+4. Nouns — 0-1 blanks (base = nominative singular, answer = correct case form)
+B1 RULES:
+- Do not use standalone article blanks. Articles are only tested as part of noun declension — never blank an article alone.
+
+B2 PRIORITY:
+1. Other — at least 2 blanks (pronouns, prepositions, particles, conjunctions — harder examples than B1)
+2. Adjectives — 2-3 blanks (base = uninflected form, answer = correctly declined form)
+3. Verbs — remaining blanks (base = infinitive, answer = correct conjugated/participial form)
+4. Nouns — 0-1 blanks (base = nominative singular, answer = correct case form)
+B2 RULES:
+- Do not use standalone article blanks. Articles are only tested as part of noun declension — never blank an article alone.
+
+SEPARABLE VERBS:
+- A1: never blank separable verbs
+- A2/B1/B2: separable verbs that split in the sentence use two blank objects with the same id, part 1 and part 2, same base (full infinitive)
+
+WORD REPETITION:
+No base form may appear more than twice across all 10 blanks. Before outputting, count every base form. If any appears 3 or more times, replace the extra occurrences with blanks using different words.
+
+TOPIC SELECTION:
+If a theme is provided, base the story on that theme.
+If no theme is provided, pick ONE topic randomly from this list and write a specific, creative story based on it:
+
+1. A postman delivers a package to the wrong address
+2. A grandmother teaches her grandchild to make Apfelstrudel
+3. Two neighbours argue over a parking space and become friends
+4. A child loses their favourite toy at the market
+5. A teenager gets their first part-time job at a bakery
+6. A man misses his train and discovers a new café
+7. A woman finds an old letter in a secondhand book
+8. A father tries to assemble furniture without instructions
+9. A student forgets their homework on the bus
+10. A family has a barbecue that nearly goes wrong
+11. A cat keeps knocking things off the kitchen counter
+12. A dog runs away and has an adventure in the park
+13. A farmer's goat escapes and walks into the village
+14. A child finds an injured sparrow and nurses it back to health
+15. A hamster escapes from its cage in the middle of the night
+16. Two dogs meet at the park and their owners become friends
+17. A cat brings home something unexpected
+18. A rabbit refuses to go back in its hutch
+19. A family adopts a rescue dog who is afraid of everything
+20. A boy tries to teach his dog a new trick
+21. A baker runs out of flour on the busiest day of the year
+22. A chef tries a new recipe and it goes wrong
+23. A child refuses to eat anything green
+24. A market stall sells the last strawberries of summer
+25. A family tries a new restaurant and can't agree on what to order
+26. A grandmother's secret cake recipe is finally revealed
+27. Someone burns dinner and has to improvise
+28. A man tries to make his wife's favourite soup for the first time
+29. A child bakes a birthday cake as a surprise
+30. A café runs out of coffee on a Monday morning
+31. A tourist gets completely lost in Munich
+32. A family's car breaks down on the motorway
+33. A first-time traveller arrives at the wrong airport
+34. A couple misses their flight and has to spend a night in the airport
+35. A child's first train journey alone
+36. A group of friends gets lost hiking in the mountains
+37. A woman moves to a new city and doesn't know anyone
+38. A man visits his hometown for the first time in twenty years
+39. A family road trip where everyone wants to stop somewhere different
+40. A cyclist gets a puncture far from home
+41. The first snow of winter surprises everyone
+42. A summer thunderstorm ruins a picnic
+43. A perfect autumn afternoon in the park
+44. Spring cleaning reveals something long forgotten
+45. A heatwave in the city and everyone tries to stay cool
+46. A child builds their first snowman
+47. A storm knocks out the power for an evening
+48. The last warm day before autumn arrives
+49. Heavy rain on the day of an outdoor wedding
+50. A foggy morning that makes everything look mysterious
+51. A local football team wins their first match in years
+52. A woman enters her first running race
+53. A child learns to ride a bike without stabilisers
+54. A chess tournament at the local club
+55. A man takes up swimming for the first time at 50
+56. A girl wins a school art competition
+57. A boy tries out for the school football team
+58. A couple takes a dance class together
+59. A woman learns to knit and makes something unexpected
+60. A teenager enters a cooking competition
+61. A teacher's last day before retirement
+62. A student gives their first presentation and is terrified
+63. A new employee gets lost on their first day at work
+64. A doctor has an unusually long queue of patients
+65. A journalist interviews someone for the first time
+66. A librarian finds a book that has been missing for years
+67. A gardener plants the wrong seeds
+68. A mechanic fixes a very old car
+69. A musician practises for an important concert
+70. A painter decorates the wrong room
+71. A surprise birthday party that nearly gets discovered
+72. A wedding where something goes wrong at the last minute
+73. A child's first Christmas morning
+74. New Year's Eve and the fireworks are cancelled
+75. A family Easter egg hunt with an unexpected winner
+76. A graduation day that doesn't go to plan
+77. A retirement party for a beloved colleague
+78. A child's first day at school
+79. A couple celebrates their anniversary in a new way
+80. A town fair on a sunny summer afternoon
+81. A power cut during a family dinner
+82. Someone finds a wallet full of money in the street
+83. A wrong number leads to an unexpected conversation
+84. A package arrives addressed to someone who moved away
+85. A woman locked out of her flat waits for a locksmith
+86. A man wins a small prize in a raffle and doesn't know what to do
+87. A child accidentally dyes their hair the wrong colour
+88. Two strangers share an umbrella in the rain
+89. A dog steals food from a picnic
+90. A lift breaks down with two strangers inside
+91. A family discovers a hidden lake on a walk
+92. A man spots a rare bird in his garden
+93. Children catch tadpoles in a stream
+94. A woman plants her first vegetable garden
+95. A family camps for the first time and forgets the tent poles
+96. A sunrise walk that turns into an adventure
+97. A child sees the sea for the first time
+98. A mushroom picking trip in the autumn forest
+99. A butterfly lands on a child's hand in the garden
+100. A family watches a meteor shower from their garden
+101. A family watches the Berlin Wall fall on television in November 1989
+102. A child asks their grandparent what life was like in East Germany
+103. A boy listens to his grandfather describe watching Germany win the 1954 World Cup
+104. A family visits the memorial at the Brandenburg Gate
+105. A teacher explains to her class how Germany became reunified
+106. A student visits the Anne Frank House in Amsterdam on a school trip
+107. A young woman hears about the end of World War Two from her grandmother
+108. A music student practises Beethoven and wonders how he composed while deaf
+109. A child visits the Einstein Museum in Bern and is inspired
+110. A student reads about how Goethe wrote Faust over sixty years
+111. A family visits Mozart's birthplace in Salzburg
+112. A boy learns that Gutenberg's printing press changed the world forever
+113. A family stays up late to watch Germany play in a World Cup final
+114. A child watches Steffi Graf win Wimbledon and decides to take up tennis
+115. A father tells his son about the magic of the 1974 World Cup on home soil
+116. A group of friends watches the Euros together in a garden
+117. A runner is inspired by a famous marathon and enters their first race
+118. A child watches Star Wars for the first time with their father in 1977
+119. A family visits the set of a famous German film
+120. A teenager discovers the music of David Bowie's Berlin years
+121. A student writes an essay about why Das Boot is considered a masterpiece
+122. A family prepares for Oktoberfest for the first time
+123. A child experiences their first Karneval in Cologne
+124. A family watches the Olympic opening ceremony together
+125. A town comes together to watch a local athlete compete at the Olympics
+
+AVOID REPEATING: The following story titles and topics already exist for this level — do not create a story with a similar topic, setting or characters to any of these: {RECENT_TITLES}
+Recent topics used at this level: {RECENT_TOPICS}
+
+These topics have already been used today at other levels — do not use a similar topic, setting or scenario: {TODAY_OTHER_TOPICS}
+
+AVOID THESE CHARACTER NAMES — do not use any of these names in the new story: {AVOID_NAMES}. Choose a completely different name.
+
+Before writing the story, choose a specific and creative perspective to tell it from. Do not default to the most obvious angle. Consider: who else is connected to this situation beyond the main participants? Could the story be told from the perspective of a bystander, a child, an elderly person, someone who almost missed it, someone watching from a distance, a worker nearby? The obvious angle is acceptable occasionally but must not be the default. Write from a fresh perspective each time.
+
+Use varied character names — not just Anna, Lisa or Maria. Use male and female characters, different ages, and occasionally animals as the main character.
+
+When writing about real people or historical events, tell the story through the eyes of a fictional character experiencing or learning about them. Do not put specific words in real people's mouths.
+
+SPACING RULES:
+- Text before a blank must end with a space
+- Text after a blank must start with a space UNLESS it begins with punctuation (. , ! ? : ;)
+- Every sentence must be followed by a space before the next word or blank
+- Never let two words run together without a space
+- Never use em dashes (—) in the story text. Use a comma, full stop or rewrite the sentence instead.
+
+OUTPUT FORMAT:
+Single minified JSON object. No line breaks anywhere inside string values.
+{"title":"...","topic":"...","story":[{"type":"text","content":"..."},{"type":"blank","id":1,"part":null,"answer":"...","base":"...","pos":"verb","gender":null},...]}
+
+The "topic" field is a short English phrase (5-10 words) describing the scenario you chose — e.g. "A child loses their favourite toy at the market" or "Custom: hiking in the mountains". If the theme was provided by the user, prefix it with "Custom: ".
+
+pos values: verb / adjective / adverb / noun / preposition / conjunction / pronoun / article / particle
+gender: null except nouns — m / f / n
+part: null except separable verb parts (1 or 2)
+
+VALIDATION — check all of these before outputting:
+- Exactly 10 unique blank ids
+- No base form appears 3 or more times
+- Count your blanks by type before outputting. At A1 and A2 there must be at least 1 Other blank (article, adverb). At B1 and B2 there must be at least 2 Other blanks (pronoun, preposition, particle, conjunction). If this minimum is not met, replace some verb blanks with Other blanks.
+- No newlines inside any string value
+- Valid minified JSON
+- All spacing rules followed`;
+
+  /* ── State ──────────────────────────────────────────────── */
+  let selectedLevel = 'A1';
+  let selectedDate  = '';
+  let currentPuzzle = null;
+  var _previewMode  = 'blanks';
+
+  /* ── Auth ───────────────────────────────────────────────── */
+  if (sessionStorage.getItem('admin_auth') === '1') showAdmin();
+
+  document.getElementById('login-btn').addEventListener('click', doLogin);
+  document.getElementById('password-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogin() {
+    const _inputVal = document.getElementById('password-input').value.trim();
+    console.log('input value:',    JSON.stringify(_inputVal));
+    console.log('PASSWORD const:', JSON.stringify(PASSWORD));
+    console.log('match:',          _inputVal === PASSWORD);
+    if (_inputVal === PASSWORD) {
+      sessionStorage.setItem('admin_auth', '1');
+      document.getElementById('login-error').hidden = true;
+      showAdmin();
+    } else {
+      document.getElementById('login-error').hidden = false;
+    }
+  }
+
+  function showAdmin() {
+    document.getElementById('login-screen').hidden = true;
+    document.getElementById('admin-screen').hidden = false;
+    const today = new Date().toISOString().slice(0, 10);
+    const dateInput = document.getElementById('date-input');
+    if (!dateInput.value) dateInput.value = today;
+    const submitDateInput = document.getElementById('submit-date-input');
+    if (!submitDateInput.value) submitDateInput.value = today;
+    const saved = sessionStorage.getItem('admin_api_key');
+    if (saved) document.getElementById('api-key-input').value = saved;
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', function () {
+    sessionStorage.removeItem('admin_auth');
+    document.getElementById('login-screen').hidden = false;
+    document.getElementById('admin-screen').hidden = true;
+    document.getElementById('password-input').value = '';
+  });
+
+  /* ── Level tabs ─────────────────────────────────────────── */
+  document.querySelectorAll('.level-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.level-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      selectedLevel = tab.dataset.level;
+    });
+  });
+
+  /* ── Preview mode toggle ────────────────────────────────── */
+  function setPreviewMode(mode) {
+    _previewMode = mode;
+    document.getElementById('mode-btn-blanks').classList.toggle('active', mode === 'blanks');
+    document.getElementById('mode-btn-text').classList.toggle('active', mode === 'text');
+    if (currentPuzzle) renderPreview(currentPuzzle);
+  }
+  document.getElementById('mode-btn-blanks').addEventListener('click', function () { setPreviewMode('blanks'); });
+  document.getElementById('mode-btn-text').addEventListener('click', function () { setPreviewMode('text'); });
+  document.getElementById('mode-btn-blanks').classList.add('active');
+
+  /* ── Generate ───────────────────────────────────────────── */
+  document.getElementById('generate-btn').addEventListener('click', generate);
+  document.getElementById('regenerate-btn').addEventListener('click', generate);
+
+  async function generate() {
+    const apiKey = document.getElementById('api-key-input').value.trim();
+    if (!apiKey) { alert('Please enter your Claude API key.'); return; }
+
+    const date = document.getElementById('date-input').value;
+    if (!date) { alert('Please select a date.'); return; }
+
+    const theme = document.getElementById('theme-input').value.trim();
+
+    sessionStorage.setItem('admin_api_key', apiKey);
+    selectedDate = date;
+
+    setGenerating(true);
+    document.getElementById('gen-error').hidden = true;
+    document.getElementById('preview-section').hidden = true;
+    hideSaveStatus();
+
+    // Small delay so any recently saved puzzles are visible to Supabase reads
+    await new Promise(function (resolve) { setTimeout(resolve, 600); });
+
+    const sbHdrs = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Accept': 'application/json' };
+    const sevenDaysAgo = (function () {
+      const d = new Date(date + 'T00:00:00Z');
+      d.setUTCDate(d.getUTCDate() - 7);
+      return d.toISOString().slice(0, 10);
+    }());
+
+    let recentTitles     = 'none yet';
+    let recentTopics     = 'none yet';
+    let todayOtherTopics = 'none';
+    let avoidNames       = 'none';
+
+    try {
+      const [titlesRes, todayRes, namesRes] = await Promise.all([
+        fetch(SUPABASE_URL + '/rest/v1/puzzles?select=title,topic&level=eq.' + selectedLevel + '&order=date.desc&limit=20', { headers: sbHdrs }),
+        fetch(SUPABASE_URL + '/rest/v1/puzzles?select=title,topic&date=eq.' + date + '&level=neq.' + selectedLevel, { headers: sbHdrs }),
+        fetch(SUPABASE_URL + '/rest/v1/puzzles?select=story&date=gte.' + sevenDaysAgo + '&order=date.desc&limit=50', { headers: sbHdrs })
+      ]);
+
+      if (titlesRes.ok) {
+        const data = await titlesRes.json();
+        if (data.length) {
+          recentTitles = data.map(function (p) { return p.title; }).join(', ');
+          const topics = data.map(function (p) { return p.topic; }).filter(Boolean);
+          if (topics.length) recentTopics = topics.join(', ');
+        }
+      }
+
+      if (todayRes.ok) {
+        const data = await todayRes.json();
+        if (data.length) {
+          const parts = data.map(function (p) { return p.topic || p.title; }).filter(Boolean);
+          if (parts.length) todayOtherTopics = parts.join(', ');
+        }
+      }
+
+      if (namesRes.ok) {
+        const data = await namesRes.json();
+        const names = extractCharacterNames(data);
+        if (names.length) avoidNames = names.join(', ');
+      }
+    } catch (e) { /* non-fatal — generate anyway */ }
+
+    const themeLine = theme ? 'Theme: ' + theme : '';
+
+    const prompt = GENERATION_PROMPT
+      .replace('{LEVEL}', selectedLevel)
+      .replace('{DATE}', date)
+      .replace('{THEME_LINE}', themeLine)
+      .replace('{RECENT_TITLES}', recentTitles)
+      .replace('{RECENT_TOPICS}', recentTopics)
+      .replace('{TODAY_OTHER_TOPICS}', todayOtherTopics)
+      .replace('{AVOID_NAMES}', avoidNames);
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: CLAUDE_MODEL,
+          max_tokens: 2000,
+          system: 'You are a JSON generator. You output only valid minified JSON. Never output anything other than JSON.',
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(function () { return {}; });
+        throw new Error((err.error && err.error.message) || 'API error ' + res.status);
+      }
+
+      const data = await res.json();
+      const raw  = data.content[0].text.trim();
+      // Strip markdown code fences if Claude wraps the JSON
+      let jsonStr = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+      // Truncate at the last } to remove any trailing text after the JSON object
+      const lastBrace = jsonStr.lastIndexOf('}');
+      if (lastBrace !== -1) jsonStr = jsonStr.slice(0, lastBrace + 1);
+      // Fix unquoted gender values (e.g. ,"gender":f} → ,"gender":"f"})
+      jsonStr = jsonStr
+        .replace(/,"gender":f}/g, ',"gender":"f"}')
+        .replace(/,"gender":m}/g, ',"gender":"m"}')
+        .replace(/,"gender":n}/g, ',"gender":"n"}');
+      const puzzle  = JSON.parse(jsonStr);
+      cleanupStoryText(puzzle);
+
+      currentPuzzle = puzzle;
+      renderPreview(puzzle);
+
+    } catch (err) {
+      const errEl = document.getElementById('gen-error');
+      errEl.textContent = 'Generation failed: ' + err.message;
+      errEl.hidden = false;
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  function extractCharacterNames(puzzles) {
+    const SKIP = new Set([
+      'Der','Die','Das','Ein','Eine','Einen','Einem','Einer','Eines',
+      'Ich','Du','Er','Sie','Es','Wir','Ihr','Sie',
+      'Aber','Und','Oder','Weil','Wenn','Als','Dass','Ob',
+      'In','An','Auf','Mit','Von','Zu','Bei','Nach','Vor','Über','Unter','Zwischen',
+      'Dann','Danach','Noch','Auch','Schon','Sehr','Immer','Nur','Jetzt','Hier','Da',
+      'Am','Im','Zum','Zur','Ins','Ans','Vom','Beim',
+      'Eines','Eines','Einem','Einen','Einer',
+      'Nicht','Kein','Keine','Mehr','Viel','Alle','Alles','Jeder','Jede','Jedes',
+      'Heute','Morgen','Gestern','Jahre','Jahren','Tag','Tage','Zeit','Mal'
+    ]);
+    const seen  = new Set();
+    const names = [];
+    puzzles.forEach(function (p) {
+      if (!p.story || !Array.isArray(p.story)) return;
+      var text = p.story
+        .filter(function (n) { return n.type === 'text'; })
+        .map(function (n) { return n.content || ''; })
+        .join(' ');
+      var words = text.match(/(?<=[a-zäöüß,;:] )[A-ZÄÖÜ][a-zäöüß]{2,}/g) || [];
+      words.forEach(function (w) {
+        if (!SKIP.has(w) && !seen.has(w)) { seen.add(w); names.push(w); }
+      });
+    });
+    return names;
+  }
+
+  function cleanupStoryText(puzzle) {
+    puzzle.story.forEach(function (node) {
+      if (node.type !== 'text' || typeof node.content !== 'string') return;
+      var s = node.content;
+      s = s.replace(/ +([.,!?:;])/g, '$1');           // remove space(s) before punctuation
+      s = s.replace(/([.,!?:;]) {2,}/g, '$1 ');       // collapse multiple spaces after punctuation to one
+      s = s.replace(/([.!?])([A-ZÄÖÜa-zäöüß])/g, '$1 $2'); // space after sentence-end punctuation before letter
+      s = s.replace(/([,;:])([^\s])/g, '$1 $2');      // space after other punctuation if missing
+      node.content = s;
+    });
+    var story = puzzle.story;
+    for (var i = 0; i < story.length; i++) {
+      var node = story[i];
+      if (node.type === 'text') {
+        var next = story[i + 1];
+        var prev = story[i - 1];
+        // Ensure space before a blank
+        if (next && next.type === 'blank' && node.content && !node.content.endsWith(' ')) {
+          node.content = node.content + ' ';
+        }
+        // Ensure space after a blank (unless text starts with punctuation)
+        if (prev && prev.type === 'blank' && node.content && !/^[.,!?:;]/.test(node.content) && !node.content.startsWith(' ')) {
+          node.content = ' ' + node.content;
+        }
+        // Ensure space between consecutive text nodes where first ends with .!? and second starts with a letter
+        if (next && next.type === 'text' && /[.!?]$/.test(node.content) && /^[A-ZÄÖÜa-zäöüß]/.test(next.content || '')) {
+          next.content = ' ' + next.content;
+        }
+      }
+    }
+  }
+
+  function setGenerating(on) {
+    const btn  = document.getElementById('generate-btn');
+    const rbtn = document.getElementById('regenerate-btn');
+    btn.disabled  = on;
+    btn.textContent = on ? 'Generating…' : 'Generate';
+    if (rbtn) rbtn.disabled = on;
+  }
+
+  /* ── Render preview ─────────────────────────────────────── */
+  /* ── Render helpers (shared between Generate and Manage) ───── */
+  function renderWordBank(puzzle, bankEl) {
+    const seen   = new Set();
+    const blanks = [];
+    puzzle.story.forEach(function (node) {
+      if (node.type === 'blank' && !seen.has(node.id)) {
+        seen.add(node.id);
+        blanks.push(node);
+      }
+    });
+    blanks.sort(function (a, b) {
+      return a.base.toLowerCase() < b.base.toLowerCase() ? -1 : 1;
+    });
+    bankEl.innerHTML = '';
+    blanks.forEach(function (blank) {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'word-chip';
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'chip-word';
+      wordSpan.textContent = blank.base;
+      const tagSpan = document.createElement('span');
+      tagSpan.className = 'chip-tag';
+      tagSpan.textContent = blank.pos;
+      chip.appendChild(wordSpan);
+      chip.appendChild(tagSpan);
+      if (blank.gender) {
+        const genSpan = document.createElement('span');
+        genSpan.className = 'chip-gender';
+        genSpan.textContent = blank.gender;
+        chip.appendChild(genSpan);
+      }
+      bankEl.appendChild(chip);
+    });
+  }
+
+  function renderStoryInto(puzzle, storyEl, bankEl) {
+    function blankWidth(val) {
+      return (Math.max((val || '').length, 3) * 11 + 20) + 'px';
+    }
+    storyEl.innerHTML = '';
+    puzzle.story.forEach(function (node, index) {
+      if (node.type === 'text') {
+        const span = document.createElement('span');
+        span.className = 'story-segment';
+        span.contentEditable = 'true';
+        span.spellcheck = false;
+        span.title = 'Click to edit text';
+        span.textContent = node.content;
+        span.addEventListener('input', function () {
+          puzzle.story[index].content = span.textContent;
+        });
+        span.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') e.preventDefault();
+        });
+        storyEl.appendChild(span);
+      } else if (node.type === 'blank') {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'blank-wrapper';
+        const num = document.createElement('span');
+        num.className = 'blank-num';
+        num.textContent = node.part === 2 ? '' : String(node.id);
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'blank-input';
+        input.setAttribute('data-id', node.id);
+        input.value = node.answer;
+        input.title = 'Edit answer';
+        input.style.width = blankWidth(node.answer);
+        input.addEventListener('input', function () {
+          puzzle.story[index].answer = input.value;
+          input.style.width = blankWidth(input.value);
+        });
+        const baseInput = document.createElement('input');
+        baseInput.type = 'text';
+        baseInput.className = 'blank-base-edit';
+        baseInput.value = node.base;
+        baseInput.title = 'Edit base form';
+        baseInput.addEventListener('input', function () {
+          puzzle.story[index].base = baseInput.value;
+          renderWordBank(puzzle, bankEl);
+        });
+        wrapper.appendChild(num);
+        wrapper.appendChild(input);
+        wrapper.appendChild(baseInput);
+        storyEl.appendChild(wrapper);
+      }
+    });
+    renderWordBank(puzzle, bankEl);
+  }
+
+  function setupEditableTitle(el, getPuzzle) {
+    el.contentEditable = 'true';
+    el.spellcheck = false;
+    el.classList.add('editable-title');
+    el.title = 'Click to edit title';
+    el.oninput = function () {
+      const p = getPuzzle();
+      if (p) p.title = el.textContent;
+    };
+    el.onkeydown = function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    };
+  }
+
+  /* ── Preview blank toggling ─────────────────────────────── */
+  var _previewEditCallback = null;
+
+  function tokenizeText(text) {
+    var tokens = [];
+    var re = /([A-Za-zÄÖÜäöüß]+(?:[-’'][A-Za-zÄÖÜäöüß]+)*)|([^A-Za-zÄÖÜäöüß]+)/g;
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      tokens.push({ text: m[0], isWord: !!m[1] });
+    }
+    return tokens;
+  }
+
+  function removePreviewBlank(puzzle, blankNode) {
+    var idx = puzzle.story.indexOf(blankNode);
+    if (idx < 0) return;
+    var before = (idx > 0 && puzzle.story[idx - 1].type === 'text') ? puzzle.story[idx - 1] : null;
+    var after  = (idx < puzzle.story.length - 1 && puzzle.story[idx + 1].type === 'text') ? puzzle.story[idx + 1] : null;
+    var merged = (before ? before.content : '') + blankNode.answer + (after ? after.content : '');
+    var start  = before ? idx - 1 : idx;
+    var count  = 1 + (before ? 1 : 0) + (after ? 1 : 0);
+    puzzle.story.splice(start, count, { type: 'text', content: merged });
+    renderPreview(puzzle);
+  }
+
+  function renderEditablePreview(puzzle, storyEl, bankEl) {
+    function blankWidth(val) { return (Math.max((val || '').length, 3) * 11 + 20) + 'px'; }
+    storyEl.innerHTML = '';
+
+    puzzle.story.forEach(function (node) {
+      if (node.type === 'text') {
+        var seg = document.createElement('span');
+        seg.className = 'preview-text-seg';
+        var offset = 0;
+        tokenizeText(node.content).forEach(function (tok) {
+          var tokStart = offset;
+          var tokEnd   = offset + tok.text.length;
+          offset = tokEnd;
+          if (tok.isWord) {
+            var span = document.createElement('span');
+            span.className = 'preview-word';
+            span.textContent = tok.text;
+            if (_previewMode !== 'blanks') {
+              span.style.cursor = 'default';
+              span.classList.remove('preview-word');
+            }
+            span.addEventListener('click', (function (n, ws, we, word) {
+              return function (e) {
+                if (_previewMode !== 'blanks') return;
+                e.stopPropagation();
+                _previewEditCallback = function (base, pos) {
+                  var ni = puzzle.story.indexOf(n);
+                  if (ni < 0) return;
+                  var maxId = 0;
+                  puzzle.story.forEach(function (s) { if (s.type === 'blank') maxId = Math.max(maxId, s.id); });
+                  var before = n.content.slice(0, ws);
+                  var after  = n.content.slice(we);
+                  var nodes  = [];
+                  if (before) nodes.push({ type: 'text', content: before });
+                  nodes.push({ type: 'blank', id: maxId + 1, part: null, answer: word, base: base, pos: pos, gender: null });
+                  if (after)  nodes.push({ type: 'text', content: after });
+                  puzzle.story.splice(ni, 1, ...nodes);
+                  renderPreview(puzzle);
+                };
+                var popup = document.getElementById('submit-word-popup');
+                document.getElementById('submit-popup-word-label').textContent = '”' + word + '”';
+                var bi = document.getElementById('submit-popup-base');
+                bi.value = word; bi.placeholder = ''; bi.disabled = false;
+                document.getElementById('submit-popup-pos').value = 'verb';
+                document.getElementById('submit-popup-confirm').disabled = false;
+                popup.style.display = 'block';
+                var rect = span.getBoundingClientRect();
+                var left = rect.left, top = rect.bottom + 8;
+                if (left + 276 > window.innerWidth) left = window.innerWidth - 276;
+                if (top + 250 > window.innerHeight) top = rect.top - 258;
+                popup.style.left = Math.max(8, left) + 'px';
+                popup.style.top  = Math.max(8, top)  + 'px';
+                bi.select();
+              };
+            }(node, tokStart, tokEnd, tok.text)));
+            seg.appendChild(span);
+          } else {
+            seg.appendChild(document.createTextNode(tok.text));
+          }
+        });
+        if (_previewMode === 'text') {
+          seg.style.cursor = 'text';
+          seg.addEventListener('click', (function (n) {
+            return function (e) {
+              if (e.target.classList.contains('preview-word')) return;
+              var inp = document.createElement('input');
+              inp.type = 'text';
+              inp.className = 'preview-text-edit';
+              inp.value = n.content;
+              inp.style.width = Math.max(n.content.length * 8, 30) + 'px';
+              seg.parentNode.replaceChild(inp, seg);
+              inp.focus();
+              inp.select();
+              function commit() {
+                n.content = inp.value;
+                renderPreview(puzzle);
+              }
+              inp.addEventListener('blur', commit);
+              inp.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); }
+                if (ev.key === 'Escape') { inp.removeEventListener('blur', commit); renderPreview(puzzle); }
+              });
+              inp.addEventListener('input', function () {
+                inp.style.width = Math.max(inp.value.length * 8, 30) + 'px';
+              });
+            };
+          }(node)));
+        } else {
+          seg.style.cursor = 'default';
+        }
+        storyEl.appendChild(seg);
+      } else if (node.type === 'blank') {
+        var wrapper = document.createElement('span');
+        wrapper.className = 'blank-wrapper';
+        var num = document.createElement('span');
+        num.className = 'blank-num';
+        num.textContent = node.part === 2 ? '' : String(node.id);
+        var ansInput = document.createElement('input');
+        ansInput.type = 'text'; ansInput.className = 'blank-input';
+        ansInput.setAttribute('data-id', node.id);
+        ansInput.value = node.answer; ansInput.title = 'Edit answer';
+        ansInput.style.width = blankWidth(node.answer);
+        ansInput.addEventListener('input', (function (n) {
+          return function () { n.answer = ansInput.value; ansInput.style.width = blankWidth(ansInput.value); };
+        }(node)));
+        var baseInp = document.createElement('input');
+        baseInp.type = 'text'; baseInp.className = 'blank-base-edit';
+        baseInp.value = node.base; baseInp.title = 'Edit base form';
+        baseInp.addEventListener('input', (function (n) {
+          return function () { n.base = baseInp.value; renderWordBank(puzzle, bankEl); };
+        }(node)));
+        var removeBtn = document.createElement('button');
+        removeBtn.type = 'button'; removeBtn.className = 'preview-blank-remove';
+        removeBtn.textContent = '×'; removeBtn.title = 'Remove blank';
+        removeBtn.addEventListener('click', (function (n) {
+          return function () { removePreviewBlank(puzzle, n); };
+        }(node)));
+        wrapper.appendChild(num); wrapper.appendChild(ansInput);
+        wrapper.appendChild(baseInp); wrapper.appendChild(removeBtn);
+        storyEl.appendChild(wrapper);
+      }
+    });
+
+    renderWordBank(puzzle, bankEl);
+  }
+
+  function renderPreview(puzzle) {
+    document.getElementById('mode-btn-blanks').classList.toggle('active', _previewMode === 'blanks');
+    document.getElementById('mode-btn-text').classList.toggle('active', _previewMode === 'text');
+    const titleEl = document.getElementById('preview-title');
+    titleEl.textContent = puzzle.title || '';
+    setupEditableTitle(titleEl, function () { return currentPuzzle; });
+    document.getElementById('preview-badge').textContent = LEVEL_NAMES[selectedLevel] || selectedLevel;
+    const topicEl = document.getElementById('preview-topic');
+    if (puzzle.topic) { topicEl.textContent = 'Topic: ' + puzzle.topic; topicEl.hidden = false; }
+    else { topicEl.hidden = true; }
+    const storyEl = document.getElementById('preview-story');
+    const bankEl  = document.getElementById('preview-word-bank');
+    renderEditablePreview(puzzle, storyEl, bankEl);
+    var fullStoryEl = document.getElementById('preview-full-story');
+    if (fullStoryEl) {
+      fullStoryEl.textContent = puzzle.story.map(function (node) {
+        return node.type === 'blank' ? node.answer : node.content;
+      }).join('');
+    }
+    const approveBtn = document.getElementById('approve-btn');
+    approveBtn.disabled = false;
+    approveBtn.textContent = 'Approve & Save';
+    document.getElementById('preview-section').hidden = false;
+  }
+
+  /* ── Approve ────────────────────────────────────────────── */
+  document.getElementById('approve-btn').addEventListener('click', async function () {
+    if (!currentPuzzle) return;
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    hideSaveStatus();
+
+    try {
+      cleanupStoryText(currentPuzzle);
+      const res = await fetch(SUPABASE_URL + '/rest/v1/puzzles', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          date:  selectedDate,
+          level: selectedLevel,
+          title: currentPuzzle.title,
+          topic: currentPuzzle.topic || null,
+          story: currentPuzzle.story
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(function () { return {}; });
+        throw new Error(err.message || err.details || err.hint || 'HTTP ' + res.status);
+      }
+
+      showSaveStatus('success',
+        'Saved! ' + selectedDate + ' · ' + (LEVEL_NAMES[selectedLevel] || selectedLevel));
+      btn.textContent = 'Approved ✓';
+      setTimeout(function () {
+        currentPuzzle = null;
+        document.getElementById('preview-section').hidden = true;
+        hideSaveStatus();
+      }, 1500);
+    } catch (err) {
+      showSaveStatus('error', 'Save failed: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = 'Approve & Save';
+    }
+  });
+
+  /* ── Save status helpers ────────────────────────────────── */
+  function showSaveStatus(type, text) {
+    const el = document.getElementById('save-status');
+    el.textContent = text;
+    el.className = 'save-status ' + type;
+    el.hidden = false;
+  }
+  function hideSaveStatus() {
+    const el = document.getElementById('save-status');
+    el.hidden = true;
+    el.className = 'save-status';
+    el.textContent = '';
+  }
+
+  /* ── Modal helpers ───────────────────────────────────────── */
+  function openModal(id) {
+    document.getElementById(id).hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  /* ── Tab switching ───────────────────────────────────────── */
+  document.querySelectorAll('.admin-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.admin-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      const id = tab.dataset.tab;
+      document.getElementById('tab-generate').hidden     = id !== 'generate';
+      document.getElementById('tab-manage').hidden       = id !== 'manage';
+      document.getElementById('tab-submit').hidden       = id !== 'submit';
+      document.getElementById('tab-overview').hidden     = id !== 'overview';
+      document.getElementById('tab-puzzle-stats').hidden = id !== 'puzzle-stats';
+      if (id === 'manage')       loadManage();
+      if (id === 'overview')     loadOverviewTab();
+      if (id === 'puzzle-stats') loadPuzzleStatsTab();
+    });
+  });
+
+  /* ── Manage tab ──────────────────────────────────────────── */
+  let currentManagePuzzle = null;
+
+  function showManageState(s) {
+    document.getElementById('manage-loading').hidden = s !== 'loading';
+    document.getElementById('manage-error').hidden   = s !== 'error';
+    document.getElementById('manage-content').hidden = s !== 'content';
+  }
+
+  function escapeHTML(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  async function loadManage() {
+    showManageState('loading');
+    try {
+      const res = await fetch(
+        SUPABASE_URL + '/rest/v1/puzzles?select=id,date,level,title,story&order=date.desc',
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Accept': 'application/json' } }
+      );
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      renderManage(await res.json());
+    } catch (e) {
+      showManageState('error');
+    }
+  }
+
+  function renderManage(puzzles) {
+    const groups = {};
+    puzzles.forEach(function (p) {
+      if (!groups[p.date]) groups[p.date] = {};
+      groups[p.date][p.level] = p;
+    });
+    const dates = Object.keys(groups).sort(function (a, b) { return a < b ? 1 : -1; });
+    const list  = document.getElementById('manage-list');
+    list.innerHTML = '';
+
+    if (!dates.length) {
+      list.innerHTML = '<p style="color:var(--text-muted);padding:40px 0;text-align:center">No puzzles yet.</p>';
+      showManageState('content');
+      return;
+    }
+
+    const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
+    dates.forEach(function (date) {
+      const row    = document.createElement('div');
+      row.className = 'manage-row';
+
+      const dateEl = document.createElement('div');
+      dateEl.className = 'manage-date';
+      const d = new Date(date + 'T00:00:00');
+      dateEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const numEl = document.createElement('div');
+      numEl.className = 'manage-date-num';
+      numEl.textContent = '#' + puzzleNumber(date);
+      dateEl.appendChild(numEl);
+
+      const slotsEl = document.createElement('div');
+      slotsEl.className = 'manage-slots';
+
+      LEVELS.forEach(function (level) {
+        const puzzle = groups[date][level];
+        const slot   = document.createElement('div');
+        if (puzzle) {
+          slot.className = 'manage-slot has-puzzle';
+          slot.innerHTML =
+            '<span class="slot-tick">✓</span>' +
+            '<span class="slot-level">' + escapeHTML(LEVEL_NAMES[level]) + '</span>' +
+            '<span class="slot-title">' + escapeHTML(puzzle.title || '') + '</span>';
+          slot.addEventListener('click', function () { openManageModal(puzzle); });
+        } else {
+          slot.className = 'manage-slot empty';
+          slot.innerHTML =
+            '<span class="slot-dash">—</span>' +
+            '<span class="slot-level">' + escapeHTML(LEVEL_NAMES[level]) + '</span>';
+        }
+        slotsEl.appendChild(slot);
+      });
+
+      row.appendChild(dateEl);
+      row.appendChild(slotsEl);
+      list.appendChild(row);
+    });
+
+    showManageState('content');
+  }
+
+  function openManageModal(puzzle) {
+    currentManagePuzzle = JSON.parse(JSON.stringify(puzzle));
+    const manageTitleEl = document.getElementById('manage-modal-title');
+    manageTitleEl.textContent = puzzle.title || '';
+    setupEditableTitle(manageTitleEl, function () { return currentManagePuzzle; });
+    document.getElementById('manage-modal-badge').textContent = LEVEL_NAMES[puzzle.level] || puzzle.level;
+    const manageTopicEl = document.getElementById('manage-modal-topic');
+    if (puzzle.topic) { manageTopicEl.textContent = 'Topic: ' + puzzle.topic; manageTopicEl.hidden = false; }
+    else { manageTopicEl.hidden = true; }
+    renderStoryInto(
+      currentManagePuzzle,
+      document.getElementById('manage-story'),
+      document.getElementById('manage-word-bank')
+    );
+    document.getElementById('manage-full-story').textContent =
+      currentManagePuzzle.story.map(function (node) {
+        return node.type === 'blank' ? node.answer : node.content;
+      }).join('');
+    const status  = document.getElementById('manage-status');
+    status.hidden = true;
+    status.className = 'save-status';
+    document.getElementById('manage-save-btn').disabled   = false;
+    document.getElementById('manage-save-btn').textContent = 'Save changes';
+    document.getElementById('manage-delete-btn').disabled   = false;
+    document.getElementById('manage-delete-btn').textContent = 'Delete puzzle';
+    openModal('manage-modal');
+  }
+
+  function buildPuzzleStatsHTML(rows) {
+    const frag = document.createDocumentFragment();
+
+    if (!rows.length) {
+      const p = document.createElement('p');
+      p.style.cssText = 'font-size:13px;color:var(--text-muted);margin:0;';
+      p.textContent = 'No completions yet.';
+      frag.appendChild(p);
+      return frag;
+    }
+
+    const total   = rows.length;
+    const avgScore = rows.reduce(function (s, r) { return s + r.score; }, 0) / total;
+    const timed    = rows.filter(function (r) { return r.time_seconds != null; });
+    const avgTime  = timed.length
+      ? Math.round(timed.reduce(function (s, r) { return s + r.time_seconds; }, 0) / timed.length)
+      : null;
+
+    // Summary blocks
+    const summary = document.createElement('div');
+    summary.className = 'puzzle-stat-summary';
+    [
+      { num: total,                         lbl: 'Completions' },
+      { num: avgScore.toFixed(1) + ' / 10', lbl: 'Avg score' },
+      { num: avgTime != null ? fmtSeconds(avgTime) : '—', lbl: 'Avg time' },
+    ].forEach(function (item) {
+      const block = document.createElement('div');
+      block.className = 'puzzle-stat-block';
+      const num = document.createElement('span');
+      num.className = 'puzzle-stat-num';
+      num.textContent = item.num;
+      const lbl = document.createElement('span');
+      lbl.className = 'puzzle-stat-lbl';
+      lbl.textContent = item.lbl;
+      block.appendChild(num);
+      block.appendChild(lbl);
+      summary.appendChild(block);
+    });
+    frag.appendChild(summary);
+
+    // Distribution label
+    const distLabel = document.createElement('p');
+    distLabel.className = 'form-label';
+    distLabel.style.marginBottom = '10px';
+    distLabel.textContent = 'Score distribution';
+    frag.appendChild(distLabel);
+
+    // Count per score 0–10
+    const counts = new Array(11).fill(0);
+    rows.forEach(function (r) { if (r.score >= 0 && r.score <= 10) counts[r.score]++; });
+    const maxCount = Math.max.apply(null, counts) || 1;
+
+    const dist = document.createElement('div');
+    dist.className = 'score-dist';
+    for (let s = 10; s >= 0; s--) {
+      const row = document.createElement('div');
+      row.className = 'score-dist-row';
+
+      const lbl = document.createElement('span');
+      lbl.className = 'score-dist-label';
+      lbl.textContent = s + '/10';
+
+      const track = document.createElement('div');
+      track.className = 'score-dist-track';
+      const bar = document.createElement('div');
+      bar.className = 'score-dist-bar';
+      bar.style.width = Math.round(counts[s] / maxCount * 100) + '%';
+      track.appendChild(bar);
+
+      const count = document.createElement('span');
+      count.className = 'score-dist-count';
+      count.textContent = counts[s] || '';
+
+      row.appendChild(lbl);
+      row.appendChild(track);
+      row.appendChild(count);
+      dist.appendChild(row);
+    }
+    frag.appendChild(dist);
+
+    return frag;
+  }
+
+  function showManageStatus(type, text) {
+    const el = document.getElementById('manage-status');
+    el.textContent  = text;
+    el.className    = 'save-status ' + type;
+    el.hidden       = false;
+  }
+
+  document.getElementById('manage-save-btn').addEventListener('click', async function () {
+    if (!currentManagePuzzle) return;
+    const btn = this;
+    btn.disabled    = true;
+    btn.textContent = 'Saving…';
+    try {
+      cleanupStoryText(currentManagePuzzle);
+      const res = await fetch(SUPABASE_URL + '/rest/v1/puzzles?id=eq.' + currentManagePuzzle.id, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ title: currentManagePuzzle.title, story: currentManagePuzzle.story })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      showManageStatus('success', 'Saved!');
+      btn.textContent = 'Saved ✓';
+      loadManage();
+    } catch (e) {
+      showManageStatus('error', 'Save failed: ' + e.message);
+      btn.disabled    = false;
+      btn.textContent = 'Save changes';
+    }
+  });
+
+  document.getElementById('manage-delete-btn').addEventListener('click', async function () {
+    if (!currentManagePuzzle) return;
+    if (!confirm('Delete this puzzle? This cannot be undone.')) return;
+    const btn = this;
+    btn.disabled    = true;
+    btn.textContent = 'Deleting…';
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/puzzles?id=eq.' + currentManagePuzzle.id, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      closeModal('manage-modal');
+      loadManage();
+    } catch (e) {
+      showManageStatus('error', 'Delete failed: ' + e.message);
+      btn.disabled    = false;
+      btn.textContent = 'Delete puzzle';
+    }
+  });
+
+  document.getElementById('manage-modal-close').addEventListener('click', function () {
+    closeModal('manage-modal');
+  });
+  document.getElementById('manage-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeModal('manage-modal');
+  });
+
+  document.getElementById('ps-modal-close').addEventListener('click', function () {
+    closeModal('puzzle-stats-modal');
+  });
+  document.getElementById('puzzle-stats-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeModal('puzzle-stats-modal');
+  });
+
+  function openPuzzleStatsModal(puzzle, scoreRows) {
+    document.getElementById('ps-modal-title').textContent = puzzle.title || '(untitled)';
+    document.getElementById('ps-modal-badge').textContent = LEVEL_NAMES[puzzle.level] || puzzle.level;
+    const body = document.getElementById('ps-modal-body');
+    body.innerHTML = '';
+    body.appendChild(buildPuzzleStatsHTML(scoreRows));
+    openModal('puzzle-stats-modal');
+  }
+
+  /* ── Submit tab ──────────────────────────────────────────── */
+  let submitLevel = 'A1';
+  let submitTokens = [];
+  let submitBlanks = {};
+  let submitPopupIdx = -1;
+
+  // Submit level tabs
+  document.querySelectorAll('.submit-level-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.submit-level-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      submitLevel = tab.dataset.level;
+      document.getElementById('submit-preview-badge').textContent = LEVEL_NAMES[submitLevel] || submitLevel;
+    });
+  });
+
+  // Load story
+  document.getElementById('submit-load-btn').addEventListener('click', function () {
+    const text = document.getElementById('submit-story-input').value.trim();
+    if (!text) { alert('Please paste a story first.'); return; }
+    const date = document.getElementById('submit-date-input').value;
+    if (!date) { alert('Please select a date.'); return; }
+    const title = document.getElementById('submit-title-input').value.trim();
+
+    submitTokens = tokenizeSubmitStory(text);
+    submitBlanks = {};
+
+    document.getElementById('submit-preview-title').textContent = title || '(no title)';
+    document.getElementById('submit-preview-badge').textContent = LEVEL_NAMES[submitLevel] || submitLevel;
+    renderSubmitStory();
+    updateSubmitCounter();
+
+    const section = document.getElementById('submit-preview-section');
+    section.style.display = 'flex';
+  });
+
+  function tokenizeSubmitStory(text) {
+    const tokens = [];
+    const re = /([A-Za-zÄäÖöÜüß]+)|([^A-Za-zÄäÖöÜüß]+)/g;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      if (m[1]) tokens.push({ type: 'word', content: m[1], el: null });
+      else      tokens.push({ type: 'text', content: m[2], el: null });
+    }
+    return tokens;
+  }
+
+  function renderSubmitStory() {
+    const container = document.getElementById('submit-story-display');
+    container.innerHTML = '';
+    submitTokens.forEach(function (tok, i) {
+      if (tok.type === 'text') {
+        container.appendChild(document.createTextNode(tok.content));
+        tok.el = null;
+      } else {
+        const span = document.createElement('span');
+        span.className = 'submit-word';
+        span.dataset.index = i;
+        refreshSubmitWordEl(span, tok.content, submitBlanks[i]);
+        span.addEventListener('click', function () { onSubmitWordClick(i); });
+        container.appendChild(span);
+        tok.el = span;
+      }
+    });
+  }
+
+  function refreshSubmitWordEl(span, word, blank) {
+    span.innerHTML = '';
+    if (blank) {
+      span.className = 'submit-word is-blank';
+      span.appendChild(document.createTextNode(word));
+      const label = document.createElement('span');
+      label.className = 'submit-blank-label';
+      label.textContent = blank.base;
+      span.appendChild(label);
+    } else {
+      span.className = 'submit-word';
+      span.textContent = word;
+    }
+  }
+
+  function updateSubmitCounter() {
+    const count = Object.keys(submitBlanks).length;
+    const counter = document.getElementById('submit-blank-counter');
+    counter.textContent = count + ' / 10 blanks';
+    counter.classList.toggle('full', count >= 10);
+    document.getElementById('submit-approve-btn').disabled = count === 0;
+  }
+
+  async function onSubmitWordClick(idx) {
+    if (submitBlanks[idx]) {
+      delete submitBlanks[idx];
+      const tok = submitTokens[idx];
+      if (tok.el) refreshSubmitWordEl(tok.el, tok.content, null);
+      updateSubmitCounter();
+      return;
+    }
+    if (Object.keys(submitBlanks).length >= 10) return;
+
+    const tok = submitTokens[idx];
+    showSubmitPopup(idx, tok.content, tok.content, 'verb', true);
+
+    const apiKey = document.getElementById('api-key-input').value.trim() || sessionStorage.getItem('admin_api_key') || '';
+    const baseInput = document.getElementById('submit-popup-base');
+    const confirmBtn = document.getElementById('submit-popup-confirm');
+    if (apiKey) {
+      try {
+        const result = await fetchBaseAndPOS(tok.content, getSentenceContext(idx), apiKey);
+        baseInput.value = result.base || tok.content;
+        if (result.pos) document.getElementById('submit-popup-pos').value = result.pos;
+      } catch (e) {
+        baseInput.value = tok.content;
+      }
+    } else {
+      baseInput.value = tok.content;
+    }
+    baseInput.placeholder = '';
+    baseInput.disabled = false;
+    confirmBtn.disabled = false;
+  }
+
+  function showSubmitPopup(idx, word, baseForm, pos, loading) {
+    submitPopupIdx = idx;
+    document.getElementById('submit-popup-word-label').textContent = '“' + word + '”';
+    const baseInput = document.getElementById('submit-popup-base');
+    baseInput.value = loading ? '' : baseForm;
+    baseInput.placeholder = loading ? 'Loading…' : '';
+    baseInput.disabled = !!loading;
+    document.getElementById('submit-popup-pos').value = pos;
+    document.getElementById('submit-popup-confirm').disabled = !!loading;
+
+    const popup = document.getElementById('submit-word-popup');
+    popup.style.display = 'block';
+
+    const tok = submitTokens[idx];
+    if (tok && tok.el) {
+      const rect = tok.el.getBoundingClientRect();
+      const popupW = 260;
+      let left = rect.left;
+      let top = rect.bottom + 8;
+      if (left + popupW + 16 > window.innerWidth) left = window.innerWidth - popupW - 16;
+      if (top + 240 > window.innerHeight) top = rect.top - 248;
+      popup.style.left = Math.max(8, left) + 'px';
+      popup.style.top = Math.max(8, top) + 'px';
+    }
+    if (loading) baseInput.focus();
+    else baseInput.select();
+  }
+
+  function hideSubmitPopup() {
+    document.getElementById('submit-word-popup').style.display = 'none';
+    submitPopupIdx = -1;
+    _previewEditCallback = null;
+  }
+
+  document.getElementById('submit-popup-confirm').addEventListener('click', function () {
+    if (_previewEditCallback) {
+      var base = document.getElementById('submit-popup-base').value.trim();
+      var pos  = document.getElementById('submit-popup-pos').value;
+      var cb   = _previewEditCallback;
+      _previewEditCallback = null;
+      hideSubmitPopup();
+      cb(base, pos);
+      return;
+    }
+    if (submitPopupIdx < 0) return;
+    const submitBase = document.getElementById('submit-popup-base').value.trim();
+    const submitPos  = document.getElementById('submit-popup-pos').value;
+    const idx  = submitPopupIdx;
+    const tok  = submitTokens[idx];
+    submitBlanks[idx] = { base: submitBase || tok.content, pos: submitPos };
+    if (tok.el) refreshSubmitWordEl(tok.el, tok.content, submitBlanks[idx]);
+    updateSubmitCounter();
+    hideSubmitPopup();
+  });
+
+  document.getElementById('submit-popup-base').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('submit-popup-confirm').click();
+    if (e.key === 'Escape') hideSubmitPopup();
+  });
+
+  document.getElementById('submit-popup-cancel').addEventListener('click', hideSubmitPopup);
+
+  document.addEventListener('click', function (e) {
+    const popup = document.getElementById('submit-word-popup');
+    if (popup.style.display === 'none') return;
+    if (popup.contains(e.target)) return;
+    if (e.target.classList.contains('submit-word')) return;
+    if (e.target.classList.contains('preview-word')) return;
+    hideSubmitPopup();
+  });
+
+  function getSentenceContext(idx) {
+    let start = 0;
+    for (let i = idx - 1; i >= 0; i--) {
+      if (submitTokens[i].type === 'text' && /[.!?]/.test(submitTokens[i].content)) {
+        start = i + 1; break;
+      }
+    }
+    let end = submitTokens.length;
+    for (let i = idx + 1; i < submitTokens.length; i++) {
+      if (submitTokens[i].type === 'text' && /[.!?]/.test(submitTokens[i].content)) {
+        end = i + 1; break;
+      }
+    }
+    return submitTokens.slice(start, end).map(function (t) { return t.content; }).join('').trim();
+  }
+
+  async function fetchBaseAndPOS(word, sentence, apiKey) {
+    const prompt = 'In this German sentence: "' + sentence + '", what is the base/infinitive form and part of speech of the word "' + word + '"? The part of speech must be one of: verb, adjective, adverb, noun, preposition, conjunction, pronoun, particle. Reply in JSON only: {"base": "...", "pos": "..."}';
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: CLAUDE_MODEL,
+        max_tokens: 60,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content && data.content[0] ? data.content[0].text.trim() : '{}';
+    const result = JSON.parse(text);
+    const dropdownPos = ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'article', 'pronoun'];
+    const pos = (result.pos || '').toLowerCase().trim();
+    return {
+      base: result.base || word,
+      pos: dropdownPos.includes(pos) ? pos : 'other'
+    };
+  }
+
+  // Reset
+  document.getElementById('submit-reset-btn').addEventListener('click', function () {
+    submitBlanks = {};
+    renderSubmitStory();
+    updateSubmitCounter();
+  });
+
+  // Approve & Save
+  document.getElementById('submit-approve-btn').addEventListener('click', async function () {
+    const date  = document.getElementById('submit-date-input').value;
+    const title = document.getElementById('submit-title-input').value.trim();
+    if (!date)  { alert('Please select a date.'); return; }
+    if (!title) { alert('Please enter a title.'); return; }
+
+    const story = buildSubmitStory();
+    const puzzle = { title: title, story: story };
+    cleanupStoryText(puzzle);
+
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    const statusEl = document.getElementById('submit-save-status');
+    statusEl.hidden = true;
+    statusEl.className = 'save-status';
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/puzzles', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ date: date, level: submitLevel, title: puzzle.title, story: puzzle.story })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(function () { return {}; });
+        throw new Error(err.message || err.details || err.hint || 'HTTP ' + res.status);
+      }
+      statusEl.textContent = 'Saved! ' + date + ' · ' + (LEVEL_NAMES[submitLevel] || submitLevel);
+      statusEl.className = 'save-status success';
+      statusEl.hidden = false;
+      btn.textContent = 'Saved ✓';
+    } catch (e) {
+      statusEl.textContent = 'Save failed: ' + e.message;
+      statusEl.className = 'save-status error';
+      statusEl.hidden = false;
+      btn.disabled = false;
+      btn.textContent = 'Approve & Save';
+    }
+  });
+
+  /* ── Stats tab ──────────────────────────────────────────── */
+  function showStatsState(s) {
+    document.getElementById('stats-loading').hidden = s !== 'loading';
+    document.getElementById('stats-error').hidden   = s !== 'error';
+    document.getElementById('stats-content').hidden = s !== 'content';
+  }
+
+  function fmtSeconds(s) {
+    if (s == null) return '—';
+    const m = Math.floor(s / 60), r = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+  }
+
+  var _overviewRows         = null;
+  var _overviewViews        = null;
+  var _overviewFilter       = 'all';
+  var _overviewFilterBuilt  = false;
+  var _overviewDatePreset   = 'last7';
+  var _overviewDateFrom     = null;
+  var _overviewDateTo       = null;
+  var _overviewDateBuilt    = false;
+
+  function getFilterDates() {
+    const today = new Date().toISOString().slice(0, 10);
+    if (_overviewDatePreset === 'today')  return { from: today, to: today };
+    if (_overviewDatePreset === 'last7') {
+      const d = new Date(today + 'T00:00:00Z');
+      d.setUTCDate(d.getUTCDate() - 6);
+      return { from: d.toISOString().slice(0, 10), to: today };
+    }
+    if (_overviewDatePreset === 'last30') {
+      const d = new Date(today + 'T00:00:00Z');
+      d.setUTCDate(d.getUTCDate() - 29);
+      return { from: d.toISOString().slice(0, 10), to: today };
+    }
+    if (_overviewDatePreset === 'custom') {
+      return { from: _overviewDateFrom || today, to: _overviewDateTo || today };
+    }
+    return { from: null, to: null };
+  }
+
+  function applyFilters() {
+    const { from, to } = getFilterDates();
+    var rows  = _overviewRows;
+    var views = _overviewViews;
+    if (from && to) {
+      rows  = rows.filter(function (r) { return r.date >= from && r.date <= to; });
+      views = views.filter(function (r) { return r.date >= from && r.date <= to; });
+    }
+    if (_overviewFilter !== 'all') {
+      rows  = rows.filter(function (r) { return r.level === _overviewFilter; });
+      views = views.filter(function (r) { return r.level === _overviewFilter; });
+    }
+    renderStatsTab(rows, views);
+  }
+
+  function buildDateRangeFilter() {
+    if (_overviewDateBuilt) { updateDateRangeUI(); return; }
+    _overviewDateBuilt = true;
+    const presets = [
+      { key: 'today',  label: 'Today' },
+      { key: 'last7',  label: 'Last 7 days' },
+      { key: 'last30', label: 'Last 30 days' },
+      { key: 'all',    label: 'All time' },
+      { key: 'custom', label: 'Custom…' },
+    ];
+    const container = document.getElementById('overview-date-presets');
+    container.innerHTML = '';
+    presets.forEach(function (p) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'overview-filter-pill';
+      btn.textContent = p.label;
+      btn.dataset.key = p.key;
+      btn.addEventListener('click', function () {
+        _overviewDatePreset = p.key;
+        updateDateRangeUI();
+        if (p.key !== 'custom') applyFilters();
+      });
+      container.appendChild(btn);
+    });
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('overview-date-from').value = today;
+    document.getElementById('overview-date-to').value   = today;
+    document.getElementById('overview-date-apply').addEventListener('click', function () {
+      _overviewDateFrom = document.getElementById('overview-date-from').value;
+      _overviewDateTo   = document.getElementById('overview-date-to').value;
+      if (_overviewDateFrom && _overviewDateTo) applyFilters();
+    });
+    updateDateRangeUI();
+  }
+
+  function updateDateRangeUI() {
+    document.querySelectorAll('#overview-date-presets .overview-filter-pill').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.key === _overviewDatePreset);
+    });
+    document.getElementById('overview-date-custom').hidden = _overviewDatePreset !== 'custom';
+  }
+
+  async function loadOverviewTab() {
+    showStatsState('loading');
+    try {
+      const hdrs = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Accept': 'application/json' };
+      const [sRes, vRes] = await Promise.all([
+        fetch(SUPABASE_URL + '/rest/v1/scores?select=date,level,score,time_seconds&order=date.desc&limit=2000', { headers: hdrs }),
+        fetch(SUPABASE_URL + '/rest/v1/views?select=date,level&limit=5000', { headers: hdrs })
+      ]);
+      if (!sRes.ok) throw new Error('HTTP ' + sRes.status);
+      _overviewRows   = await sRes.json();
+      _overviewViews  = vRes.ok ? await vRes.json() : [];
+      _overviewFilter = 'all';
+      _overviewDatePreset = 'last7';
+      buildDateRangeFilter();
+      buildOverviewFilter();
+      applyFilters();
+    } catch (e) {
+      showStatsState('error');
+    }
+  }
+
+  function buildOverviewFilter() {
+    if (_overviewFilterBuilt) { updateOverviewFilterUI(); return; }
+    _overviewFilterBuilt = true;
+    const container = document.getElementById('overview-filter');
+    container.innerHTML = '';
+    const filters = [
+      { key: 'all',  label: 'All' },
+      { key: 'A1',   label: 'Beginner' },
+      { key: 'A2',   label: 'Easy' },
+      { key: 'B1',   label: 'Medium' },
+      { key: 'B2',   label: 'Hard' },
+      { key: 'C1',   label: 'Expert' },
+    ];
+    filters.forEach(function (f) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'overview-filter-pill' + (f.key === _overviewFilter ? ' active' : '');
+      btn.textContent = f.label;
+      btn.dataset.key = f.key;
+      btn.addEventListener('click', function () {
+        _overviewFilter = f.key;
+        updateOverviewFilterUI();
+        applyFilters();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function updateOverviewFilterUI() {
+    document.querySelectorAll('#overview-filter .overview-filter-pill').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.key === _overviewFilter);
+    });
+    document.getElementById('stats-by-level-section').hidden = _overviewFilter !== 'all';
+  }
+
+  function renderStatsTab(rows, views) {
+    views = views || [];
+    const today = new Date().toISOString().slice(0, 10);
+    const todayCount = rows.filter(function (r) { return r.date === today; }).length;
+    const avgAll = rows.length
+      ? (rows.reduce(function (s, r) { return s + r.score; }, 0) / rows.length).toFixed(1)
+      : null;
+
+    document.getElementById('stat-total-plays').textContent = rows.length;
+    document.getElementById('stat-today-plays').textContent = todayCount;
+    document.getElementById('stat-overall-avg').textContent = avgAll ? avgAll + '/10' : '—';
+
+    // ── Plays per day bar chart ───────────────────────────
+    const dayMap = {};
+    rows.forEach(function (r) {
+      if (!dayMap[r.date]) dayMap[r.date] = 0;
+      dayMap[r.date]++;
+    });
+    const chartEl = document.createElement('div');
+    chartEl.className = 'day-chart';
+    const { from: cfrom, to: cto } = getFilterDates();
+    const chartTo   = cto || today;
+    var   chartFrom = cfrom;
+    if (!chartFrom) {
+      const dataMin = Object.keys(dayMap).sort()[0];
+      const cap     = new Date(chartTo + 'T00:00:00Z');
+      cap.setUTCDate(cap.getUTCDate() - 89);
+      chartFrom = dataMin && dataMin > cap.toISOString().slice(0, 10)
+        ? dataMin : cap.toISOString().slice(0, 10);
+    }
+    const cStart   = new Date(chartFrom + 'T00:00:00Z');
+    const cEnd     = new Date(chartTo   + 'T00:00:00Z');
+    const diffDays = Math.round((cEnd - cStart) / 86400000) + 1;
+    var chartBuckets = [];
+    if (diffDays <= 60) {
+      for (var ci = 0; ci < diffDays; ci++) {
+        const d = new Date(cStart);
+        d.setUTCDate(d.getUTCDate() + ci);
+        const key = d.toISOString().slice(0, 10);
+        chartBuckets.push({ key: key, label: key.slice(5).replace('-', '/'), count: dayMap[key] || 0, isToday: key === today });
+      }
+    } else {
+      const weekTotals = {};
+      const weekOrder  = [];
+      for (var wi = 0; wi < diffDays; wi++) {
+        const d = new Date(cStart);
+        d.setUTCDate(d.getUTCDate() + wi);
+        const key = d.toISOString().slice(0, 10);
+        const day = d.getUTCDay();
+        const mon = new Date(d);
+        mon.setUTCDate(d.getUTCDate() - ((day + 6) % 7));
+        const wk = mon.toISOString().slice(0, 10);
+        if (!weekTotals[wk]) { weekTotals[wk] = 0; weekOrder.push(wk); }
+        weekTotals[wk] += dayMap[key] || 0;
+      }
+      weekOrder.forEach(function (wk) {
+        chartBuckets.push({ key: wk, label: wk.slice(5).replace('-', '/'), count: weekTotals[wk], isToday: false });
+      });
+    }
+    const maxCount = chartBuckets.reduce(function (m, b) { return Math.max(m, b.count); }, 1);
+    const labelsEl = document.createElement('div');
+    labelsEl.className = 'day-chart-labels';
+    chartBuckets.forEach(function (b) {
+      const pct = Math.round((b.count / maxCount) * 100);
+      const col = document.createElement('div');
+      col.className = 'day-chart-col';
+      const bar = document.createElement('div');
+      bar.className = 'day-chart-bar' + (b.isToday ? ' today' : '');
+      bar.style.height = Math.max(pct, b.count > 0 ? 4 : 0) + '%';
+      const tip = document.createElement('div');
+      tip.className = 'day-chart-tip';
+      tip.textContent = b.key + ': ' + b.count + ' play' + (b.count !== 1 ? 's' : '');
+      col.appendChild(tip);
+      col.appendChild(bar);
+      chartEl.appendChild(col);
+      const lbl = document.createElement('div');
+      lbl.className = 'day-chart-label';
+      lbl.textContent = b.label;
+      labelsEl.appendChild(lbl);
+    });
+    const chartWrap = document.createElement('div');
+    chartWrap.appendChild(chartEl);
+    chartWrap.appendChild(labelsEl);
+    replaceContent('stats-daily', chartWrap);
+
+    // ── By level ─────────────────────────────────────────
+    const LEVELS = ['A1', 'A2', 'B1', 'B2'];
+    const levelMap = {};
+    rows.forEach(function (r) {
+      if (!levelMap[r.level]) levelMap[r.level] = { count: 0, scoreSum: 0, timeSum: 0, timeCount: 0 };
+      levelMap[r.level].count++;
+      levelMap[r.level].scoreSum += r.score;
+      if (r.time_seconds != null) {
+        levelMap[r.level].timeSum += r.time_seconds;
+        levelMap[r.level].timeCount++;
+      }
+    });
+
+    const levelTable = makeTable(['Level', 'Plays', 'Avg score', 'Avg time']);
+    const levelBody  = levelTable.querySelector('tbody');
+    LEVELS.forEach(function (level) {
+      const lv = levelMap[level];
+      const tr = levelBody.insertRow();
+      const nameCell = tr.insertCell();
+      const pill = document.createElement('span');
+      pill.className = 'stats-level-pill';
+      pill.textContent = level;
+      nameCell.appendChild(pill);
+      nameCell.appendChild(document.createTextNode(LEVEL_NAMES[level] || ''));
+      tr.insertCell().textContent = lv ? lv.count : 0;
+      tr.insertCell().textContent = lv ? (lv.scoreSum / lv.count).toFixed(1) + ' / 10' : '—';
+      tr.insertCell().textContent = lv && lv.timeCount ? fmtSeconds(Math.round(lv.timeSum / lv.timeCount)) : '—';
+    });
+    replaceContent('stats-by-level', levelTable);
+
+    // ── Completion rate ───────────────────────────────────
+    const viewMap = {};
+    views.forEach(function (v) {
+      viewMap[v.level] = (viewMap[v.level] || 0) + 1;
+    });
+    const completionTable = makeTable(['Level', 'Views', 'Completions', 'Rate']);
+    const completionBody  = completionTable.querySelector('tbody');
+    const completionLevels = _overviewFilter === 'all' ? LEVELS : [_overviewFilter];
+    let totalViews = 0, totalCompletions = 0;
+    completionLevels.forEach(function (level) {
+      const v = viewMap[level] || 0;
+      const c = levelMap[level] ? levelMap[level].count : 0;
+      totalViews += v; totalCompletions += c;
+      const rate = v > 0 ? Math.round((c / v) * 100) + '%' : '—';
+      const tr = completionBody.insertRow();
+      const nameCell = tr.insertCell();
+      const pill = document.createElement('span');
+      pill.className = 'stats-level-pill';
+      pill.textContent = level;
+      nameCell.appendChild(pill);
+      nameCell.appendChild(document.createTextNode(LEVEL_NAMES[level] || ''));
+      tr.insertCell().textContent = v;
+      tr.insertCell().textContent = c;
+      tr.insertCell().textContent = rate;
+    });
+    if (_overviewFilter === 'all' && completionLevels.length > 1) {
+      const totRate = totalViews > 0 ? Math.round((totalCompletions / totalViews) * 100) + '%' : '—';
+      const tr = completionBody.insertRow();
+      tr.style.fontWeight = '600';
+      tr.insertCell().textContent = 'All';
+      tr.insertCell().textContent = totalViews;
+      tr.insertCell().textContent = totalCompletions;
+      tr.insertCell().textContent = totRate;
+    }
+    replaceContent('stats-completion', completionTable);
+
+    // ── Avg score by level per week ───────────────────────
+    const weekMap = {};
+    rows.forEach(function (r) {
+      const d = new Date(r.date + 'T00:00:00Z');
+      const day = d.getUTCDay();
+      const monday = new Date(d);
+      monday.setUTCDate(d.getUTCDate() - ((day + 6) % 7));
+      const wk = monday.toISOString().slice(0, 10);
+      if (!weekMap[wk]) weekMap[wk] = {};
+      if (!weekMap[wk][r.level]) weekMap[wk][r.level] = { sum: 0, count: 0 };
+      weekMap[wk][r.level].sum   += r.score;
+      weekMap[wk][r.level].count += 1;
+    });
+    const weeks = Object.keys(weekMap).sort(function (a, b) { return a < b ? 1 : -1; });
+    const weekLevels = _overviewFilter === 'all' ? LEVELS : [_overviewFilter];
+    const weekHeaders = ['Week'].concat(weekLevels.map(function (l) { return LEVEL_NAMES[l] || l; }));
+    const weekTable = makeTable(weekHeaders);
+    const weekBody  = weekTable.querySelector('tbody');
+    if (weeks.length) {
+      weeks.forEach(function (wk) {
+        const tr = weekBody.insertRow();
+        tr.insertCell().textContent = wk;
+        weekLevels.forEach(function (level) {
+          const lv = weekMap[wk][level];
+          tr.insertCell().textContent = lv ? (lv.sum / lv.count).toFixed(1) : '—';
+        });
+      });
+    } else {
+      emptyRow(weekBody, weekHeaders.length);
+    }
+    replaceContent('stats-weekly', weekTable);
+
+    // ── Recent scores ────────────────────────────────────
+    const recentTable = makeTable(['Date', 'Level', 'Score', 'Time']);
+    const recentBody  = recentTable.querySelector('tbody');
+    const recent = rows.slice(0, 20);
+    if (recent.length) {
+      recent.forEach(function (r) {
+        const tr = recentBody.insertRow();
+        tr.insertCell().textContent = r.date;
+        const lvCell = tr.insertCell();
+        const pill2  = document.createElement('span');
+        pill2.className = 'stats-level-pill';
+        pill2.textContent = r.level;
+        lvCell.appendChild(pill2);
+        tr.insertCell().textContent = r.score + ' / 10';
+        tr.insertCell().textContent = fmtSeconds(r.time_seconds);
+      });
+    } else {
+      emptyRow(recentBody, 4);
+    }
+    replaceContent('stats-recent', recentTable);
+
+    showStatsState('content');
+  }
+
+  /* ── Puzzle Stats tab ───────────────────────────────────── */
+  function showPsState(s) {
+    document.getElementById('ps-loading').hidden = s !== 'loading';
+    document.getElementById('ps-error').hidden   = s !== 'error';
+    document.getElementById('ps-content').hidden = s !== 'content';
+  }
+
+  async function loadPuzzleStatsTab() {
+    showPsState('loading');
+    try {
+      const headers = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Accept': 'application/json' };
+      const [pRes, sRes] = await Promise.all([
+        fetch(SUPABASE_URL + '/rest/v1/puzzles?select=id,date,level,title&order=date.desc&limit=500', { headers }),
+        fetch(SUPABASE_URL + '/rest/v1/scores?select=date,level,score,time_seconds&order=date.desc&limit=2000', { headers })
+      ]);
+      if (!pRes.ok || !sRes.ok) throw new Error('fetch failed');
+      renderPuzzleStatsTab(await pRes.json(), await sRes.json());
+    } catch (e) {
+      showPsState('error');
+    }
+  }
+
+  function renderPuzzleStatsTab(puzzles, scores) {
+    const scoreMap = {};
+    scores.forEach(function (s) {
+      const key = s.date + '_' + s.level;
+      if (!scoreMap[key]) scoreMap[key] = [];
+      scoreMap[key].push(s);
+    });
+
+    const levelOrder = { A1: 0, A2: 1, B1: 2, B2: 3, C1: 4 };
+
+    const dateGroups = {};
+    puzzles.forEach(function (p) {
+      if (!dateGroups[p.date]) dateGroups[p.date] = [];
+      dateGroups[p.date].push(p);
+    });
+    const dates = Object.keys(dateGroups).sort(function (a, b) { return a < b ? 1 : -1; });
+
+    const content = document.getElementById('ps-content');
+    content.innerHTML = '';
+
+    if (!dates.length) {
+      const empty = document.createElement('p');
+      empty.style.cssText = 'color:var(--text-muted);padding:40px 0;text-align:center;';
+      empty.textContent = 'No puzzles yet.';
+      content.appendChild(empty);
+      showPsState('content');
+      return;
+    }
+
+    dates.forEach(function (date) {
+      const row = document.createElement('div');
+      row.className = 'manage-row';
+
+      const dateEl = document.createElement('div');
+      dateEl.className = 'manage-date';
+      const d = new Date(date + 'T00:00:00Z');
+      dateEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const numEl = document.createElement('div');
+      numEl.className = 'manage-date-num';
+      numEl.textContent = '#' + puzzleNumber(date);
+      dateEl.appendChild(numEl);
+
+      const slots = document.createElement('div');
+      slots.className = 'manage-slots';
+
+      dateGroups[date]
+        .slice()
+        .sort(function (a, b) { return (levelOrder[a.level] || 0) - (levelOrder[b.level] || 0); })
+        .forEach(function (puzzle) {
+          const scoreRows = scoreMap[puzzle.date + '_' + puzzle.level] || [];
+          const completions = scoreRows.length;
+          const playsStr    = completions === 1 ? '1 play' : completions + ' plays';
+          let   row2Text    = playsStr;
+          if (completions > 0) {
+            const avg = (scoreRows.reduce(function (s, r) { return s + r.score; }, 0) / completions).toFixed(1);
+            row2Text += ' · ' + avg + ' avg';
+          }
+
+          const pillTier = completions === 0 ? 'none'
+                         : completions  <  5 ? 'low'
+                         : completions  < 10 ? 'mid'
+                         :                     'high';
+
+          const pill = document.createElement('button');
+          pill.type = 'button';
+          pill.className = 'ps-pill ps-pill--' + pillTier;
+
+          const row1 = document.createElement('div');
+          row1.className = 'ps-pill-row1';
+          const levelSpan = document.createElement('span');
+          levelSpan.className = 'ps-pill-level';
+          levelSpan.textContent = LEVEL_NAMES[puzzle.level] || puzzle.level;
+          const titleSpan = document.createElement('span');
+          titleSpan.className = 'ps-pill-title';
+          titleSpan.textContent = puzzle.title || '(untitled)';
+          row1.appendChild(levelSpan);
+          row1.appendChild(titleSpan);
+
+          const row2 = document.createElement('div');
+          row2.className = 'ps-pill-row2';
+          row2.textContent = row2Text;
+
+          pill.appendChild(row1);
+          pill.appendChild(row2);
+          pill.addEventListener('click', function () { openPuzzleStatsModal(puzzle, scoreRows); });
+          slots.appendChild(pill);
+        });
+
+      row.appendChild(dateEl);
+      row.appendChild(slots);
+      content.appendChild(row);
+    });
+
+    showPsState('content');
+  }
+
+  function makeTable(headers) {
+    const table = document.createElement('table');
+    table.className = 'stats-table';
+    const thead = table.createTHead();
+    const hrow  = thead.insertRow();
+    headers.forEach(function (h) {
+      const th = document.createElement('th');
+      th.textContent = h;
+      hrow.appendChild(th);
+    });
+    table.createTBody();
+    return table;
+  }
+
+  function emptyRow(tbody, cols) {
+    const tr = tbody.insertRow();
+    const td = tr.insertCell();
+    td.colSpan = cols;
+    td.style.cssText = 'color:var(--text-muted);text-align:center;padding:24px;';
+    td.textContent = 'No data yet.';
+  }
+
+  function replaceContent(id, el) {
+    const container = document.getElementById(id);
+    container.innerHTML = '';
+    container.appendChild(el);
+  }
+
+  function buildSubmitStory() {
+    const story = [];
+    let blankId = 1;
+
+    function appendText(content) {
+      if (story.length && story[story.length - 1].type === 'text') {
+        story[story.length - 1].content += content;
+      } else {
+        story.push({ type: 'text', content: content });
+      }
+    }
+
+    submitTokens.forEach(function (tok, i) {
+      if (tok.type === 'text') {
+        appendText(tok.content);
+      } else if (submitBlanks[i]) {
+        const b = submitBlanks[i];
+        story.push({ type: 'blank', id: blankId++, part: null, answer: tok.content, base: b.base, pos: b.pos, gender: null });
+      } else {
+        appendText(tok.content);
+      }
+    });
+
+    return story;
+  }
+</script>
+
+</body>
+</html>

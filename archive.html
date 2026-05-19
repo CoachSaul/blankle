@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BL_NKLE — Archive</title>
+  <script>(function(){if(localStorage.getItem('blankle_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}());</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --brand:       #2eb4fb;
+      --brand-dark:  #0d9fe8;
+      --brand-light: rgba(46, 180, 251, 0.07);
+      --brand-mid:   rgba(46, 180, 251, 0.18);
+      --font-story:  'Lora', Georgia, serif;
+    }
+
+    /* ── Header ──────────────────────────────────── */
+    .site-header {
+      padding: 84px 0 42px;
+      height: auto;
+    }
+    .header-inner {
+      height: auto;
+      align-items: baseline;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+    .header-brand {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 48px;
+      font-weight: bold;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .header-sub {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 27px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+    .site-header .container { padding-left: 0; }
+    @media (min-width: 750px) and (max-width: 869px) {
+      .site-header .container { padding-left: calc((100vw - 750px) / 2); }
+    }
+    @media (min-width: 870px) {
+      .site-header .container { padding-left: calc((100vw - 750px) / 2 - 60px); }
+    }
+
+    /* ── Icon bar ─────────────────────────────────── */
+    .icon-bar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+    }
+    .icon-bar-inner {
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 4px 30px 4px 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+    }
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 0;
+      transition: background 0.14s;
+      -webkit-appearance: none;
+    }
+    .icon-btn:hover { background: rgba(0,0,0,0.06); }
+
+    /* ── Layout ───────────────────────────────────── */
+    /* Override style.css's centred container so header padding-left
+       is measured from the viewport edge, matching puzzle.html */
+    .container {
+      margin: 0;
+      max-width: 100%;
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+    main.container {
+      max-width: 750px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    @media (max-width: 768px) {
+      main.container { padding-left: 20px; padding-right: 20px; }
+    }
+
+    /* ── Archive controls ─────────────────────────── */
+    .archive-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0 20px;
+    }
+    .archive-heading {
+      font-family: var(--font-story);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .random-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      background: var(--brand);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.14s, transform 0.1s;
+      -webkit-appearance: none;
+    }
+    .random-btn:hover  { background: var(--brand-dark); }
+    .random-btn:active { transform: scale(0.97); }
+
+    .load-more-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 28px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: border-color 0.14s, color 0.14s;
+      -webkit-appearance: none;
+    }
+    .load-more-btn:hover { border-color: #aaa; color: var(--text); }
+    .random-msg {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: right;
+      padding: 4px 0 16px;
+    }
+
+    /* ── Archive list ─────────────────────────────── */
+    .archive-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .archive-row:first-child { border-top: 1px solid var(--border); }
+    .archive-date {
+      font-family: var(--font-story);
+      font-size: 15px;
+      color: var(--text);
+      min-width: 155px;
+      padding-top: 7px;
+      flex-shrink: 0;
+    }
+    .archive-levels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .level-card {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.13s, background 0.13s;
+      min-width: 90px;
+    }
+    .level-card:hover {
+      border-color: var(--brand);
+      background: var(--brand-light);
+    }
+    .level-card-badge {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .level-card-title {
+      font-family: var(--font-story);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+    .level-card--done {
+      background: #e6f9ee;
+      border-color: #4caf7d;
+    }
+    .level-card--done:hover {
+      background: #d4f3e3;
+      border-color: #3a9669;
+    }
+    .level-card--done .level-card-badge { color: #2e7d52; }
+    [data-theme="dark"] .level-card--done {
+      background: rgba(76, 175, 125, 0.18);
+      border-color: #4caf7d;
+    }
+    [data-theme="dark"] .level-card--done:hover {
+      background: rgba(76, 175, 125, 0.28);
+    }
+    [data-theme="dark"] .level-card--done .level-card-badge { color: #6fcf97; }
+    .empty-archive {
+      padding: 60px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    /* ── Modals ───────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-panel {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px 28px 32px;
+      max-width: 380px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .modal-close {
+      align-self: flex-end;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .modal-close:hover { color: var(--text-muted); }
+    .modal-close-x { font-size: 2.5em; font-weight: 300; line-height: 1; }
+    .modal-logo-box {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--text);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: var(--text);
+    }
+    .modal-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--text);
+      text-align: center;
+    }
+    .modal-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 2px 0;
+    }
+    .settings-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .toggle-btn {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      background: var(--border);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      -webkit-appearance: none;
+    }
+    .toggle-btn[aria-checked="true"] { background: var(--brand); }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      display: block;
+      pointer-events: none;
+    }
+    .toggle-btn[aria-checked="true"] .toggle-knob { transform: translateX(18px); }
+
+    /* ── Dark mode ────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg:           #1c1c1e;
+      --card:         #2c2c2e;
+      --text:         #f0f0ed;
+      --text-muted:   #8e8e93;
+      --border:       #3a3a3c;
+      --brand-light:  rgba(46, 180, 251, 0.15);
+      --brand-mid:    rgba(46, 180, 251, 0.28);
+      --shadow:       0 1px 3px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.4);
+    }
+    [data-theme="dark"] .icon-btn       { color: #fff; }
+    [data-theme="dark"] .icon-btn:hover { background: rgba(255,255,255,0.1); }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 600px) {
+      .site-header   { padding: 40px 0 24px; }
+      .header-brand  { font-size: 36px; }
+      .header-sub    { font-size: 20px; }
+      .archive-row   { flex-direction: column; gap: 10px; }
+      .archive-date  { min-width: 0; padding-top: 0; }
+      .level-card-title { max-width: 120px; }
+    }
+    @media (max-width: 479px) {
+      .site-header { padding: 20px 0 16px; }
+      .header-brand { font-size: 28px; }
+      .header-sub { font-size: 16px; }
+      .header-inner { gap: 10px; margin-left: 16px; }
+      .icon-btn { width: 34px; height: 34px; }
+      .icon-btn svg { width: 24px; height: 24px; }
+      .icon-bar-inner { padding: 2px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="header-brand">BL_NKLE</a>
+      <span class="header-sub">Archive</span>
+    </div>
+  </header>
+
+  <div class="icon-bar">
+    <div class="icon-bar-inner">
+      <a class="icon-btn" href="index.html" aria-label="Back to home" style="margin-right:auto;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+      </a>
+      <button class="icon-btn" id="help-btn" aria-label="How to play">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="settings-btn" aria-label="Settings">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <div id="loading-state" class="state-panel">
+      <div class="spinner"></div>
+      <p>Loading archive…</p>
+    </div>
+
+    <div id="error-state" class="state-panel" hidden>
+      <p class="error-icon">📭</p>
+      <p class="error-message">Could not load archive.</p>
+    </div>
+
+    <div id="archive-content" hidden>
+      <div class="archive-controls">
+        <h1 class="archive-heading">All puzzles</h1>
+        <button class="random-btn" id="random-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+            <polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="21" y2="21"/>
+          </svg>
+          Random
+        </button>
+      </div>
+      <p class="random-msg" id="random-msg" hidden></p>
+      <div id="archive-list"></div>
+      <div id="load-more-wrap" style="display:none; text-align:center; margin-top:24px; margin-bottom:8px;">
+        <button class="load-more-btn" id="load-more-btn">Load more</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Learn German one blank at a time. 4 new puzzles every day.</p>
+    </div>
+  </footer>
+
+  <div id="help-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="help-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="modal-title">Archive</p>
+      <p class="modal-body">Every past puzzle is here. Green means you have already completed it.</p>
+      <p class="modal-body">Click Random to play one you have not yet completed.</p>
+      <p class="modal-body">Archive puzzles do not count towards your stats or streak.</p>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="settings-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="modal-title">Settings</p>
+      <div class="settings-row">
+        <span class="settings-label">Dark mode</span>
+        <button class="toggle-btn" id="dark-mode-toggle" role="switch" aria-checked="false">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="completed-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="completed-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="modal-title">All done!</p>
+      <p class="modal-body">Wow! You've completed every available puzzle. New puzzles are added daily — check back soon!</p>
+    </div>
+  </div>
+
+  <script>
+    var SUPABASE_URL = 'https://mjrllbftoruhvwzedkym.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_e0QYsjxJv0MmgmdWI-tFNw_kxh6mPID';
+    var LEVEL_NAMES  = { A1: 'Beginner', A2: 'Easy', B1: 'Medium', B2: 'Hard' };
+    var LEVEL_ORDER  = ['A1', 'A2', 'B1', 'B2'];
+    var THEME_KEY    = 'blankle_theme';
+
+    // ── Theme ──────────────────────────────────────
+    function isDark() { return localStorage.getItem(THEME_KEY) === 'dark'; }
+    function applyTheme(dark) {
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      var t = document.getElementById('dark-mode-toggle');
+      if (t) t.setAttribute('aria-checked', dark ? 'true' : 'false');
+    }
+
+    // ── State ──────────────────────────────────────
+    function showState(s) {
+      document.getElementById('loading-state').hidden   = s !== 'loading';
+      document.getElementById('error-state').hidden     = s !== 'error';
+      document.getElementById('archive-content').hidden = s !== 'content';
+    }
+
+    // ── Fetch all puzzles ──────────────────────────
+    async function loadArchive() {
+      try {
+        var today = new Date().toISOString().slice(0, 10);
+        var url = SUPABASE_URL + '/rest/v1/puzzles?select=date,level,title&date=lt.' + today + '&order=date.desc';
+        var res = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Accept': 'application/json'
+          }
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var puzzles = await res.json();
+        renderArchive(puzzles);
+      } catch (err) {
+        showState('error');
+      }
+    }
+
+    // ── Render ─────────────────────────────────────
+    var _archiveDates = [];
+    var _archiveGroups = {};
+    var _archiveRendered = 0;
+    var PAGE_SIZE = 7;
+
+    function renderDateRow(date) {
+      var list = document.getElementById('archive-list');
+      var row = document.createElement('div');
+      row.className = 'archive-row';
+
+      var dateEl = document.createElement('div');
+      dateEl.className = 'archive-date';
+      var d = new Date(date + 'T00:00:00');
+      dateEl.textContent = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+      var levelsEl = document.createElement('div');
+      levelsEl.className = 'archive-levels';
+
+      LEVEL_ORDER.forEach(function (level) {
+        var puzzle = _archiveGroups[date][level];
+        if (!puzzle) return;
+        var done = localStorage.getItem('luckentext_' + date + '_' + level) !== null;
+        var card = document.createElement('a');
+        card.className = 'level-card' + (done ? ' level-card--done' : '');
+        card.href = 'puzzle.html?date=' + date + '&level=' + level;
+
+        var badge = document.createElement('span');
+        badge.className = 'level-card-badge';
+        badge.textContent = LEVEL_NAMES[level];
+
+        var title = document.createElement('span');
+        title.className = 'level-card-title';
+        title.textContent = puzzle.title || '';
+
+        card.appendChild(badge);
+        card.appendChild(title);
+        levelsEl.appendChild(card);
+      });
+
+      row.appendChild(dateEl);
+      row.appendChild(levelsEl);
+      list.appendChild(row);
+    }
+
+    function renderNextPage() {
+      var end = Math.min(_archiveRendered + PAGE_SIZE, _archiveDates.length);
+      for (var i = _archiveRendered; i < end; i++) {
+        renderDateRow(_archiveDates[i]);
+      }
+      _archiveRendered = end;
+      var wrap = document.getElementById('load-more-wrap');
+      wrap.style.display = _archiveRendered < _archiveDates.length ? 'block' : 'none';
+    }
+
+    function renderArchive(puzzles) {
+      _archiveGroups = {};
+      puzzles.forEach(function (p) {
+        if (!_archiveGroups[p.date]) _archiveGroups[p.date] = {};
+        _archiveGroups[p.date][p.level] = p;
+      });
+
+      _archiveDates = Object.keys(_archiveGroups).sort(function (a, b) {
+        return a < b ? 1 : a > b ? -1 : 0;
+      });
+
+      var list = document.getElementById('archive-list');
+      list.innerHTML = '';
+      _archiveRendered = 0;
+
+      if (!_archiveDates.length) {
+        var empty = document.createElement('p');
+        empty.className = 'empty-archive';
+        empty.textContent = 'No puzzles yet — check back tomorrow!';
+        list.appendChild(empty);
+        showState('content');
+        return;
+      }
+
+      renderNextPage();
+      showState('content');
+    }
+
+    document.getElementById('load-more-btn').addEventListener('click', renderNextPage);
+
+    // ── Modal helpers ──────────────────────────────
+    function openModal(id) {
+      document.getElementById(id).hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    // ── Init ───────────────────────────────────────
+    applyTheme(isDark());
+
+    document.getElementById('completed-close').addEventListener('click', function () { closeModal('completed-modal'); });
+    document.getElementById('completed-modal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal('completed-modal');
+    });
+
+    document.getElementById('help-btn').addEventListener('click', function () { openModal('help-modal'); });
+    document.getElementById('help-close').addEventListener('click', function () { closeModal('help-modal'); });
+    document.getElementById('help-modal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal('help-modal');
+    });
+
+    document.getElementById('settings-btn').addEventListener('click', function () { openModal('settings-modal'); });
+    document.getElementById('settings-close').addEventListener('click', function () { closeModal('settings-modal'); });
+    document.getElementById('settings-modal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal('settings-modal');
+    });
+    document.getElementById('dark-mode-toggle').addEventListener('click', function () {
+      var dark = !isDark();
+      localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+      applyTheme(dark);
+    });
+
+    document.getElementById('random-btn').addEventListener('click', async function () {
+      var btn = this;
+      var msg = document.getElementById('random-msg');
+      msg.hidden = true;
+      var origHTML = btn.innerHTML;
+      btn.textContent = '…';
+      btn.disabled = true;
+      try {
+        var today = new Date().toISOString().slice(0, 10);
+        var url = SUPABASE_URL + '/rest/v1/puzzles?select=date,level&date=lt.' + today;
+        var res = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Accept': 'application/json'
+          }
+        });
+        var puzzles = await res.json();
+        var unplayed = puzzles.filter(function (p) {
+          return localStorage.getItem('luckentext_' + p.date + '_' + p.level) === null;
+        });
+        if (!unplayed.length) {
+          if (puzzles.length) {
+            openModal('completed-modal');
+          } else {
+            msg.textContent = 'No archive puzzles available yet.';
+            msg.hidden = false;
+          }
+          btn.innerHTML = origHTML;
+          btn.disabled = false;
+          return;
+        }
+        var pick = unplayed[Math.floor(Math.random() * unplayed.length)];
+        window.location.href = 'puzzle.html?date=' + pick.date + '&level=' + pick.level;
+      } catch (err) {
+        btn.innerHTML = origHTML;
+        btn.disabled = false;
+      }
+    });
+
+    loadArchive();
+  </script>
+
+</body>
+</html>
