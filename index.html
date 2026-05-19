@@ -427,6 +427,24 @@
     </div>
   </div>
 
+  <div id="archive-soon-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="archive-soon-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">Archive</p>
+      <p class="modal-body">Archive coming soon!</p>
+    </div>
+  </div>
+
+  <div id="random-soon-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="random-soon-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="settings-title">Random</p>
+      <p class="modal-body">Random puzzle selector coming soon!</p>
+    </div>
+  </div>
+
   <div id="completed-modal" class="modal-overlay" hidden>
     <div class="modal-panel">
       <button class="modal-close" id="completed-close">Close <span class="modal-close-x">&times;</span></button>
@@ -473,7 +491,7 @@
     </div>
 
     <button class="play-btn" id="play-btn">Play</button>
-    <a class="archive-btn" href="archive.html">Archive</a>
+    <button class="archive-btn" id="archive-btn">Archive</button>
     <button class="archive-btn" id="random-btn">Random</button>
     <p class="no-puzzles-msg" id="no-puzzles-msg" hidden>No puzzles available yet for this level.</p>
 
@@ -507,48 +525,22 @@
       window.location.href = 'puzzle.html?level=' + selectedLevel;
     });
 
-    // Random puzzle
-    const SUPABASE_URL = 'https://mjrllbftoruhvwzedkym.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_e0QYsjxJv0MmgmdWI-tFNw_kxh6mPID';
-    document.getElementById('random-btn').addEventListener('click', async function () {
-      const btn = this;
-      const msg = document.getElementById('no-puzzles-msg');
-      msg.hidden = true;
-      btn.textContent = '…';
-      btn.disabled = true;
-      try {
-        const today = new Date().toISOString().slice(0, 10);
-        const url = SUPABASE_URL + '/rest/v1/puzzles?select=date&level=eq.' + selectedLevel + '&date=neq.' + today;
-        const res = await fetch(url, {
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Accept': 'application/json'
-          }
-        });
-        const puzzles = await res.json();
-        const unplayed = puzzles.filter(function (p) {
-          return localStorage.getItem('luckentext_' + p.date + '_' + selectedLevel) === null;
-        });
-        if (!unplayed.length) {
-          if (puzzles.length) {
-            document.getElementById('completed-modal').hidden = false;
-            document.body.style.overflow = 'hidden';
-          } else {
-            msg.textContent = 'No puzzles available yet for this level.';
-            msg.hidden = false;
-          }
-          btn.textContent = 'Random';
-          btn.disabled = false;
-          return;
-        }
-        const pick = unplayed[Math.floor(Math.random() * unplayed.length)];
-        window.location.href = 'puzzle.html?date=' + pick.date + '&level=' + selectedLevel;
-      } catch (err) {
-        btn.textContent = 'Random';
-        btn.disabled = false;
-      }
-    });
+    // Archive + Random coming soon
+    function openModal(id) {
+      document.getElementById(id).hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModalById(id) {
+      document.getElementById(id).hidden = true;
+      document.body.style.overflow = '';
+    }
+    document.getElementById('archive-btn').addEventListener('click', function () { openModal('archive-soon-modal'); });
+    document.getElementById('archive-soon-close').addEventListener('click', function () { closeModalById('archive-soon-modal'); });
+    document.getElementById('archive-soon-modal').addEventListener('click', function (e) { if (e.target === this) closeModalById('archive-soon-modal'); });
+
+    document.getElementById('random-btn').addEventListener('click', function () { openModal('random-soon-modal'); });
+    document.getElementById('random-soon-close').addEventListener('click', function () { closeModalById('random-soon-modal'); });
+    document.getElementById('random-soon-modal').addEventListener('click', function (e) { if (e.target === this) closeModalById('random-soon-modal'); });
 
     // Mark completed levels
     (function () {

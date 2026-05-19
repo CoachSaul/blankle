@@ -462,6 +462,24 @@
     </div>
   </div>
 
+  <div id="archive-soon-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="archive-soon-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="modal-title">Archive</p>
+      <p class="modal-body">Archive coming soon!</p>
+    </div>
+  </div>
+
+  <div id="random-soon-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="random-soon-close">Close <span class="modal-close-x">&times;</span></button>
+      <div class="modal-logo-box">b</div>
+      <p class="modal-title">Random</p>
+      <p class="modal-body">Random puzzle selector coming soon!</p>
+    </div>
+  </div>
+
   <div id="settings-modal" class="modal-overlay" hidden>
     <div class="modal-panel">
       <button class="modal-close" id="settings-close">Close <span class="modal-close-x">&times;</span></button>
@@ -647,45 +665,12 @@
       applyTheme(dark);
     });
 
-    document.getElementById('random-btn').addEventListener('click', async function () {
-      var btn = this;
-      var msg = document.getElementById('random-msg');
-      msg.hidden = true;
-      var origHTML = btn.innerHTML;
-      btn.textContent = '…';
-      btn.disabled = true;
-      try {
-        var today = new Date().toISOString().slice(0, 10);
-        var url = SUPABASE_URL + '/rest/v1/puzzles?select=date,level&date=lt.' + today;
-        var res = await fetch(url, {
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Accept': 'application/json'
-          }
-        });
-        var puzzles = await res.json();
-        var unplayed = puzzles.filter(function (p) {
-          return localStorage.getItem('luckentext_' + p.date + '_' + p.level) === null;
-        });
-        if (!unplayed.length) {
-          if (puzzles.length) {
-            openModal('completed-modal');
-          } else {
-            msg.textContent = 'No archive puzzles available yet.';
-            msg.hidden = false;
-          }
-          btn.innerHTML = origHTML;
-          btn.disabled = false;
-          return;
-        }
-        var pick = unplayed[Math.floor(Math.random() * unplayed.length)];
-        window.location.href = 'puzzle.html?date=' + pick.date + '&level=' + pick.level;
-      } catch (err) {
-        btn.innerHTML = origHTML;
-        btn.disabled = false;
-      }
-    });
+    document.getElementById('random-btn').addEventListener('click', function () { openModal('random-soon-modal'); });
+    document.getElementById('random-soon-close').addEventListener('click', function () { closeModal('random-soon-modal'); });
+    document.getElementById('random-soon-modal').addEventListener('click', function (e) { if (e.target === this) closeModal('random-soon-modal'); });
+
+    document.getElementById('archive-soon-close').addEventListener('click', function () { closeModal('archive-soon-modal'); });
+    document.getElementById('archive-soon-modal').addEventListener('click', function (e) { if (e.target === this) closeModal('archive-soon-modal'); });
 
     loadArchive();
   </script>
