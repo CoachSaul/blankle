@@ -1860,6 +1860,19 @@ VALIDATION — check all of these before outputting:
     return tokens;
   }
 
+  function renumberBlanks(puzzle) {
+    var counter = 0;
+    var oldToNew = {};
+    puzzle.story.forEach(function (node) {
+      if (node.type !== 'blank') return;
+      if (!(node.id in oldToNew)) { counter++; oldToNew[node.id] = counter; }
+    });
+    puzzle.story.forEach(function (node) {
+      if (node.type !== 'blank') return;
+      node.id = oldToNew[node.id];
+    });
+  }
+
   function removePreviewBlank(puzzle, blankNode) {
     var idx = puzzle.story.indexOf(blankNode);
     if (idx < 0) return;
@@ -1869,6 +1882,7 @@ VALIDATION — check all of these before outputting:
     var start  = before ? idx - 1 : idx;
     var count  = 1 + (before ? 1 : 0) + (after ? 1 : 0);
     puzzle.story.splice(start, count, { type: 'text', content: merged });
+    renumberBlanks(puzzle);
     renderPreview(puzzle);
   }
 
@@ -1909,6 +1923,7 @@ VALIDATION — check all of these before outputting:
                   nodes.push({ type: 'blank', id: maxId + 1, part: null, answer: word, base: base, pos: pos, gender: null });
                   if (after)  nodes.push({ type: 'text', content: after });
                   puzzle.story.splice(ni, 1, ...nodes);
+                  renumberBlanks(puzzle);
                   renderPreview(puzzle);
                 };
                 var popup = document.getElementById('submit-word-popup');
