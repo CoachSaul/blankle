@@ -5,7 +5,11 @@
       "Bash(curl -s \"https://mjrllbftoruhvwzedkym.supabase.co/rest/v1/puzzles?date=eq.2026-05-09&level=eq.B1&select=*&apikey=sb_publishable_e0QYsjxJv0MmgmdWI-tFNw_kxh6mPID\")",
       "Bash(python3 -m json.tool)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)"
     ]
   }
 }

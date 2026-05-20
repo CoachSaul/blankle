@@ -1068,7 +1068,7 @@
       var levelName  = LEVEL_NAMES[level] || level;
       var num        = getPuzzleNumber(p && p.date);
       var grid       = r.groups.map(function (g) {
-        return g.blanks.every(function (b) { return r.userAnswers[b.id] === b.answer; }) ? '🟩' : '🟥';
+        return g.blanks.every(function (b) { return r.userAnswers[b.internalId] === b.answer; }) ? '🟩' : '🟥';
       }).join('');
       var line1 = 'BL_NKLE' + (num != null ? ' #' + num : '') + ' · ' + levelName;
       var line2 = r.score + '/' + r.maxScore + (r.finalTime ? ' · ' + r.finalTime : '');

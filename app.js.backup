@@ -89,7 +89,7 @@ function renderPuzzle(puzzle) {
   storyText.innerHTML = buildStoryHTML(puzzle, blanks);
 
   document.querySelectorAll('.blank-input').forEach(inp => {
-    inp.addEventListener('focus', () => { focusedBlankId = inp.dataset.id; });
+    inp.addEventListener('focus', () => { focusedBlankId = Number(inp.dataset.id); });
     inp.addEventListener('blur',  () => { setTimeout(() => { focusedBlankId = null; }, 220); });
     inp.addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); moveFocus(inp, 1); }
@@ -105,17 +105,12 @@ function renderPuzzle(puzzle) {
 //
 // New format: puzzle.story is an array of {type:"text"|"blank", ...} segments.
 // Old format: puzzle.story is a string; blanks live in puzzle.blanks.
-// Normalised blank shape: { id, internalId, displayId, answer, base, pos, part, gender }
-//
-// Separable verb pairs share the same numeric id. We deduplicate by assigning
-// internalId: first occurrence → String(id), second → String(id)+"b". displayId
-// is always the original number shown to the user.
+// Normalised blank shape: { id, answer, base, pos, part, gender }
 function extractBlanks(puzzle) {
   const story = puzzle.story;
-  let blanks;
 
   if (Array.isArray(story)) {
-    blanks = story
+    return story
       .filter(s => s.type === 'blank')
       .map(s => ({
         id:     s.id,
@@ -125,29 +120,19 @@ function extractBlanks(puzzle) {
         part:   s.part,
         gender: s.gender,
       }));
-  } else {
-    // Old format – normalise field names
-    let raw = puzzle.blanks || [];
-    if (typeof raw === 'string') { try { raw = JSON.parse(raw); } catch (_) { raw = []; } }
-    blanks = raw.map(b => ({
-      id:     b.id,
-      answer: b.answer,
-      base:   b.base   || b.base_form,
-      pos:    b.pos    || b.pos_tag,
-      part:   b.part,
-      gender: b.gender,
-    }));
   }
 
-  const seen = {};
-  return blanks.map(b => {
-    const key = String(b.id);
-    if (seen[key]) {
-      return { ...b, internalId: key + 'b', displayId: b.id };
-    }
-    seen[key] = true;
-    return { ...b, internalId: key, displayId: b.id };
-  });
+  // Old format – normalise field names
+  let raw = puzzle.blanks || [];
+  if (typeof raw === 'string') { try { raw = JSON.parse(raw); } catch (_) { raw = []; } }
+  return raw.map(b => ({
+    id:     b.id,
+    answer: b.answer,
+    base:   b.base   || b.base_form,
+    pos:    b.pos    || b.pos_tag,
+    part:   b.part,
+    gender: b.gender,
+  }));
 }
 
 // ─── Story HTML ───────────────────────────────────────────
@@ -155,15 +140,10 @@ function buildStoryHTML(puzzle, blanks) {
   const story = puzzle.story;
 
   if (Array.isArray(story)) {
-    const idUsed = {};
     return story.map(seg => {
       if (seg.type === 'text')  return escapeHTML(seg.content).replace(/\n/g, '<br>');
       if (seg.type === 'blank') {
-        const key = String(seg.id);
-        const n = idUsed[key] || 0;
-        idUsed[key] = n + 1;
-        const internalId = n === 0 ? key : key + 'b';
-        const blank = blanks.find(b => b.internalId === internalId);
+        const blank = blanks.find(b => b.id === seg.id);
         return blank ? inputHTML(blank) : '';
       }
       return '';
@@ -171,16 +151,14 @@ function buildStoryHTML(puzzle, blanks) {
   }
 
   // String format with [n] markers
+  const byId = {};
+  blanks.forEach(b => { byId[b.id] = b; });
+
   if (/\[\d+\]/.test(story)) {
-    const idUsed = {};
     return story.split(/(\[\d+\])/g).map(part => {
       const m = part.match(/^\[(\d+)\]$/);
       if (!m) return escapeHTML(part).replace(/\n/g, '<br>');
-      const key = m[1];
-      const n = idUsed[key] || 0;
-      idUsed[key] = n + 1;
-      const internalId = n === 0 ? key : key + 'b';
-      const blank = blanks.find(b => b.internalId === internalId);
+      const blank = byId[Number(m[1])];
       return blank ? inputHTML(blank) : escapeHTML(part);
     }).join('');
   }
@@ -200,11 +178,11 @@ function buildStoryHTML(puzzle, blanks) {
 function inputHTML(blank) {
   const w = Math.max((blank.answer || '').length + 2, 5);
   return `<span class="blank-wrapper">\
-<span class="blank-num">${blank.displayId}</span>\
+<span class="blank-num">${blank.id}</span>\
 <input class="blank-input" type="text"\
  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"\
- data-id="${blank.internalId}" style="width:${w}ch"\
- aria-label="Blank ${blank.displayId}">\
+ data-id="${blank.id}" style="width:${w}ch"\
+ aria-label="Blank ${blank.id}">\
 </span>`;
 }
 
@@ -226,14 +204,9 @@ function moveFocus(currentInput, dir) {
 // ─── Word Bank ────────────────────────────────────────────
 function renderWordBank(blanks) {
   wordBankEl.innerHTML = '';
-  const seenBase = new Set();
-  const unique = blanks.filter(b => {
-    if (seenBase.has(b.base)) return false;
-    seenBase.add(b.base);
-    return true;
-  });
 
-  unique
+  blanks
+    .slice()
     .sort((a, b) => a.base.localeCompare(b.base, 'de'))
     .forEach(blank => {
       const chip = document.createElement('button');
@@ -298,7 +271,7 @@ function buildScoreGroups(blanks) {
 
 function computeScore(groups, userAnswers) {
   return groups.reduce((sum, g) => {
-    return sum + (g.blanks.every(b => userAnswers[b.internalId] === b.answer) ? 1 : 0);
+    return sum + (g.blanks.every(b => userAnswers[b.id] === b.answer) ? 1 : 0);
   }, 0);
 }
 
@@ -310,9 +283,9 @@ function checkAnswers() {
   const userAnswers = collectAnswers();
 
   blanks.forEach(blank => {
-    const inp = document.querySelector(`.blank-input[data-id="${blank.internalId}"]`);
+    const inp = document.querySelector(`.blank-input[data-id="${blank.id}"]`);
     if (!inp) return;
-    const correct = userAnswers[blank.internalId] === blank.answer;
+    const correct = userAnswers[blank.id] === blank.answer;
     inp.classList.add('checked');
     inp.classList.toggle('correct',   correct);
     inp.classList.toggle('incorrect', !correct);
@@ -333,7 +306,7 @@ function checkAnswers() {
 function collectAnswers() {
   const answers = {};
   document.querySelectorAll('.blank-input').forEach(inp => {
-    answers[inp.dataset.id] = inp.value.trim();
+    answers[Number(inp.dataset.id)] = inp.value.trim();
   });
   return answers;
 }
@@ -346,7 +319,7 @@ function showResults(score, maxScore, groups, userAnswers) {
 
   scoreBreakdown.innerHTML = '';
   groups.forEach(group => {
-    const allCorrect = group.blanks.every(b => userAnswers[b.internalId] === b.answer);
+    const allCorrect = group.blanks.every(b => userAnswers[b.id] === b.answer);
     scoreBreakdown.appendChild(buildBreakdownRow(group, userAnswers, allCorrect));
   });
 
@@ -377,7 +350,7 @@ function buildBreakdownRow(group, userAnswers, allCorrect) {
   answersEl.className = 'bd-answers';
 
   group.blanks.forEach((blank, i) => {
-    const given   = userAnswers[blank.internalId] || '—';
+    const given   = userAnswers[blank.id] || '—';
     const correct = given === blank.answer;
 
     if (i > 0) {
@@ -426,9 +399,9 @@ function restoreCompleted(puzzle, saved) {
   const blanks = extractBlanks(puzzle);
 
   blanks.forEach(blank => {
-    const inp = document.querySelector(`.blank-input[data-id="${blank.internalId}"]`);
+    const inp = document.querySelector(`.blank-input[data-id="${blank.id}"]`);
     if (!inp) return;
-    inp.value = saved.userAnswers[blank.internalId] || '';
+    inp.value = saved.userAnswers[blank.id] || '';
     const correct = inp.value === blank.answer;
     inp.classList.add('checked');
     inp.classList.toggle('correct',   correct);
@@ -488,7 +461,7 @@ function shareResults() {
   const dateStr = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   const grid = groups.map(g =>
-    g.blanks.every(b => userAnswers[b.internalId] === b.answer) ? '🟩' : '🟥'
+    g.blanks.every(b => userAnswers[b.id] === b.answer) ? '🟩' : '🟥'
   ).join('');
 
   const text = `🇩🇪 Cloze · ${dateStr} · ${currentLevel}\n${grid}\n${score}/${maxScore}`;
